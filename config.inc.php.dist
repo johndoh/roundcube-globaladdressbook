@@ -13,7 +13,14 @@
 */
 
 // the name of the dummy which holds the global address book, if the user does not exist it will be created
+// the name can contain the following macros that will be expanded as follows:
+//      %d is replaced with the domain part of the username
+//         (in case the username is an email address, else imap host will be used)
+// eg. to create one global address book per domain: global_addressbook@%d
 $rcmail_config['globaladdressbook_user'] = '[global_addressbook_user]';
+
+// create global address book per imap host
+$rcmail_config['globaladdressbook_per_host'] = true;
 
 // make global address book read only
 $rcmail_config['globaladdressbook_readonly'] = true;
