@@ -20,9 +20,7 @@ To create a single global address book for everyone who access RoundCube set thi
 To create a global address book per email domain which RoundCube serves set this options to something like: 'lobal_addressbook@%d'
 The username can contain the following macros that will be expanded as follows:
 	%d is replaced with the domain part of the logged in user's username
-
-'per_host'
-Create a global address book per imap host
+	%h is replaced with the imap host (from the session info)
 
 'readonly'
 Make address book read only, users will not be able to edit the contents of the address book or add new contacts

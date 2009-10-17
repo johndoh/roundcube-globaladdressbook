@@ -16,7 +16,7 @@ class globaladdressbook extends rcube_plugin
 	private $readonly;
 	private $user_id;
 	private $user_name;
-	private $host;
+	private $host = 'localhost';
 
 	public function init()
 	{
@@ -27,8 +27,8 @@ class globaladdressbook extends rcube_plugin
 			$user_info = explode('@', $_SESSION['username']);
 			if (count($user_info) >= 2)
 				$this->user_name = str_replace('%d', $user_info[1], $this->user_name);
+		    $this->user_name = str_replace('%h', $_SESSION['imap_host'], $this->user_name);
 			$this->readonly = $this->_is_readonly();
-			$this->host = $rcmail->config->get('globaladdressbook_per_host') ? $_SESSION['imap_host'] : 'localhost';
 
 			// check if the global address book user exists
 			if (!($user = rcube_user::query($this->user_name, $this->host)))
