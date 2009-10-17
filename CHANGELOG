@@ -1,0 +1,13 @@
+Roundcube Webmail GlobalAddressbook
+===================================
+
+2009 10 17
+==========
+ * Add 'admin' user option
+ * Localise address book name
+
+2009 10 09
+==========
+ * Fix buggy user creation
+ * Allow for per domain address books
+ * Allow for per host address books

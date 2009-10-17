@@ -5,7 +5,7 @@
  *
  * Plugin to add a global address book
  *
- * @version 1.1
+ * @version 1.2
  * @author Philip Weir
  * @url http://roundcube.net/plugins/globaladdressbook
  */
@@ -17,7 +17,6 @@ class globaladdressbook extends rcube_plugin
 	private $user_id;
 	private $user_name;
 	private $host;
-	private $abook_name;
 
 	public function init()
 	{
@@ -26,9 +25,9 @@ class globaladdressbook extends rcube_plugin
 			$this->load_config();
 			$this->user_name = $rcmail->config->get('globaladdressbook_user');
 			$user_info = explode('@', $_SESSION['username']);
-			$this->user_name = (count($user_info) >= 2) ? str_replace('%d', $user_info[1], $this->user_name) : $_SESSION['imap_host'];
-			$this->readonly = $rcmail->config->get('globaladdressbook_readonly');
-			$this->abook_name = $rcmail->config->get('globaladdressbook_name');
+			if (count($user_info) >= 2)
+				$this->user_name = str_replace('%d', $user_info[1], $this->user_name);
+			$this->readonly = $this->_is_readonly();
 			$this->host = $rcmail->config->get('globaladdressbook_per_host') ? $_SESSION['imap_host'] : 'localhost';
 
 			// check if the global address book user exists
@@ -53,7 +52,8 @@ class globaladdressbook extends rcube_plugin
 
 	public function address_sources($args)
 	{
-		$args['sources'][$this->abook_id] = array('id' => $this->abook_id, 'name' => $this->abook_name, 'readonly' => $this->readonly);
+		$this->add_texts('localization/');
+		$args['sources'][$this->abook_id] = array('id' => $this->abook_id, 'name' => $this->gettext('globaladdressbook'), 'readonly' => $this->readonly);
 		return $args;
 	}
 
@@ -66,4 +66,27 @@ class globaladdressbook extends rcube_plugin
 
 		return $args;
 	}
+
+	private function _is_readonly() {
+		$rcmail = rcmail::get_instance();
+
+		if (!$rcmail->config->get('globaladdressbook_readonly'))
+			return false;
+
+		if ($admin = $rcmail->config->get('globaladdressbook_admin')) {
+			if (is_array($admin)) {
+				foreach ($admin as $user) {
+					if ($user == $_SESSION['username'])
+						return false;
+				}
+			}
+			elseif ($admin == $_SESSION['username']) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }
+
+?>

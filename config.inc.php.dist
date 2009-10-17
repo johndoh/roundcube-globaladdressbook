@@ -25,8 +25,9 @@ $rcmail_config['globaladdressbook_per_host'] = true;
 // make global address book read only
 $rcmail_config['globaladdressbook_readonly'] = true;
 
-// friendly name of the global address book, label used on the address book screen
-$rcmail_config['globaladdressbook_name'] = 'Global Addresses';
+// global address book admin user
+// either a single username or an array of usernames
+$rcmail_config['globaladdressbook_admin'] = null;
 
 // show addresses from the global address book in the auto complete menu when composing an email
 $rcmail_config['globaladdressbook_autocomplete'] = true;
