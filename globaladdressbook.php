@@ -27,7 +27,7 @@ class globaladdressbook extends rcube_plugin
 			$user_info = explode('@', $_SESSION['username']);
 			if (count($user_info) >= 2)
 				$this->user_name = str_replace('%d', $user_info[1], $this->user_name);
-		    $this->user_name = str_replace('%h', $_SESSION['imap_host'], $this->user_name);
+			$this->user_name = str_replace('%h', $_SESSION['imap_host'], $this->user_name);
 			$this->readonly = $this->_is_readonly();
 
 			// check if the global address book user exists
@@ -74,14 +74,15 @@ class globaladdressbook extends rcube_plugin
 			return false;
 
 		if ($admin = $rcmail->config->get('globaladdressbook_admin')) {
-			if (is_array($admin)) {
-				foreach ($admin as $user) {
-					if ($user == $_SESSION['username'])
+			if (!is_array($admin)) $admin = array($admin);
+
+			foreach ($admin as $user) {
+				if (strpos($user, '/') == 0 && substr($user, -1) == '/') {
+					if (preg_match($user, $_SESSION['username']))
 						return false;
 				}
-			}
-			elseif ($admin == $_SESSION['username']) {
-				return false;
+				elseif ($user == $_SESSION['username'])
+					return false;
 			}
 		}
 

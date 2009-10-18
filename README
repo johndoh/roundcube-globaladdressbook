@@ -29,6 +29,7 @@ Make address book read only, users will not be able to edit the contents of the 
 The admin is a user or users who will always have full read/write access even if the address book is set to read only
 To set a single user as admin then enter their username as a string like: 'admin@domain.com'
 If you wish give admin rights to multiple users then enter the usernames in an array like: array('admin1@domain.com', 'admin2@domain.com')
+You can also use regual expressions to match the admin username, regular expressions must be started and finished the a /. Eg: '/^admin@/'
 
 'autocomplete'
 Show contacts from this book in the auto complete menu when composing an email
