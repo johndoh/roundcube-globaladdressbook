@@ -7,7 +7,6 @@
  *
  * @version 1.3
  * @author Philip Weir
- * @url http://roundcube.net/plugins/globaladdressbook
  */
 class globaladdressbook extends rcube_plugin
 {
