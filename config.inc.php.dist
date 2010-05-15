@@ -1,16 +1,8 @@
 <?php
 
-/*
- +-----------------------------------------------------------------------+
- | GlobalAddressbook configuration file                                  |
- |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
- | Licensed under the GNU GPL                                            |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
-*/
+/**
+ * GlobalAddressbook configuration file
+ */
 
 // the name of the dummy which holds the global address book, if the user does not exist it will be created
 // the name can contain the following macros that will be expanded as follows:
@@ -22,8 +14,12 @@ $rcmail_config['globaladdressbook_user'] = '[global_addressbook_user]';
 // make global address book read only
 $rcmail_config['globaladdressbook_readonly'] = true;
 
+// allow groups in global address book
+$rcmail_config['globaladdressbook_groups'] = false;
+
 // global address book admin user
-// either a single username or an array of usernames
+// admin user(s) can always add/edit/delete entries, overrides readonly
+// either a single username, an array of usernames, or a regular expression, see README for more info
 $rcmail_config['globaladdressbook_admin'] = null;
 
 // show addresses from the global address book in the auto complete menu when composing an email

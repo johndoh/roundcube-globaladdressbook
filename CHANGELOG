@@ -1,5 +1,10 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
+
+2010 04 15
+==========
+ * Enable groups support (r3614)
+
 2010 04 09
 ==========
  * Prepare for groups stuff
