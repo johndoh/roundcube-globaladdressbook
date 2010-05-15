@@ -1,8 +1,8 @@
 <?php
-/* Author: Yuri Timofeev */
+/* Author: zyxd */
 
 $labels = array();
-$labels['globaladdressbook'] = 'Глобальная адресная книга';
+$labels['globaladdressbook'] = 'Глобальные адреса';
 
 $messages = array();
 
