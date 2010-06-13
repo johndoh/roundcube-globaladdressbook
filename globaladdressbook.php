@@ -23,9 +23,7 @@ class globaladdressbook extends rcube_plugin
 		$rcmail = rcmail::get_instance();
 		$this->load_config();
 		$this->user_name = $rcmail->config->get('globaladdressbook_user');
-		$user_info = explode('@', $_SESSION['username']);
-		if (count($user_info) >= 2)
-			$this->user_name = str_replace('%d', $user_info[1], $this->user_name);
+		$this->user_name = str_replace('%d', $this->_username_domain(), $this->user_name);
 		$this->user_name = str_replace('%h', $_SESSION['imap_host'], $this->user_name);
 		$this->readonly = $this->_is_readonly();
 		$this->groups = $rcmail->config->get('globaladdressbook_groups', false);
@@ -67,7 +65,8 @@ class globaladdressbook extends rcube_plugin
 		return $args;
 	}
 
-	private function _is_readonly() {
+	private function _is_readonly()
+	{
 		$rcmail = rcmail::get_instance();
 
 		if (!$rcmail->config->get('globaladdressbook_readonly'))
@@ -87,6 +86,20 @@ class globaladdressbook extends rcube_plugin
 		}
 
 		return true;
+	}
+
+	private function _username_domain()
+	{
+		$user_info = explode('@', $_SESSION['username']);
+
+		if (!empty($user_info[1]))
+			return $user_info[1];
+
+		// if no domain was provided use the default if available
+		if ($domain = rcmail::get_instance()->config->get('mail_domain'))
+			return $domain;
+
+		return '';
 	}
 }
 
