@@ -1,6 +1,10 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+2010 05 20
+==========
+ * Username parsing now in core (r3774)
+
 2010 05 15
 ==========
  * Enable groups support (r3614)
