@@ -25,7 +25,8 @@ Roundcube Webmail GlobalAddressbook
 ==========
  * Add 'admin' user option
  * Localise address book name
- * Make config simplier (may cause problems in existing installations, ensure user host in db is set to localhost)
+ * Make config simplier (may cause problems in existing installations, ensure
+   user host in db is set to localhost)
 
 2009 10 09
 ==========
