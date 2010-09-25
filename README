@@ -1,6 +1,6 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
-This plugin adds an SQL based global address book to roundcube. It can be
+This plugin adds an SQL based global address book to Roundcube. It can be
 global per installation, per IMAP host or per domain.
 
 License
@@ -15,8 +15,8 @@ folder for details on the skin license.
 
 Install
 =======
-* Place this plugin folder into plugins directory of RoundCube
-* Add globaladdressbook to $rcmail_config['plugins'] in your RoundCube config
+* Place this plugin folder into plugins directory of Roundcube
+* Add globaladdressbook to $rcmail_config['plugins'] in your Roundcube config
 NB: When downloading the plugin from GitHub you will need to create a directory
 called globaladdressbook and place the files in there, ignoring the root
 directory in the downloaded archive.
@@ -29,11 +29,11 @@ Rename this to plugins/globaladdressbook/config.inc.php
 'username'
 This is the name of the dummy user which holds the global address book.
 The username does not have to belong to a valid email account. The username
-will be stored in the RoundCube database but will not be able to log into
-RoundCube unless it belongs to a valid email account on your server.
-To create a single global address book for everyone who access RoundCube set
+will be stored in the Roundcube database but will not be able to log into
+Roundcube unless it belongs to a valid email account on your server.
+To create a single global address book for everyone who access Roundcube set
 this options to something like: '[global_addressbook_user]'
-To create a global address book per email domain which RoundCube serves set
+To create a global address book per email domain which Roundcube serves set
 this options to something like: 'lobal_addressbook@%d'
 The username can contain the following macros that will be expanded as
 follows:
