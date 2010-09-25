@@ -29,8 +29,15 @@ class globaladdressbook extends rcube_plugin
 		$this->groups = $rcmail->config->get('globaladdressbook_groups', false);
 
 		// check if the global address book user exists
-		if (!($user = rcube_user::query($this->user_name, $this->host)))
+		if (!($user = rcube_user::query($this->user_name, $this->host))) {
+			// this action overrides the current user information so make a copy and then restore it
+			$cur_user = $rcmail->user;
 			$user = rcube_user::create($this->user_name, $this->host);
+			$rcmail->user = $cur_user;
+
+			// prevent new_user_dialog plugin from triggering
+			$_SESSION['plugin.newuserdialog'] = false;
+		}
 
 		$this->user_id = $user->ID;
 
