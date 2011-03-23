@@ -34,7 +34,7 @@ Roundcube unless it belongs to a valid email account on your server.
 To create a single global address book for everyone who access Roundcube set
 this options to something like: '[global_addressbook_user]'
 To create a global address book per email domain which Roundcube serves set
-this options to something like: 'lobal_addressbook@%d'
+this options to something like: 'global_addressbook@%d'
 The username can contain the following macros that will be expanded as
 follows:
   %d is replaced with the domain part of the logged in user's username
