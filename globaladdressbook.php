@@ -14,6 +14,7 @@ class globaladdressbook extends rcube_plugin
 	private $abook_id = 'global';
 	private $readonly;
 	private $groups;
+	private $name;
 	private $user_id;
 	private $user_name;
 	private $host = 'localhost';
@@ -22,11 +23,14 @@ class globaladdressbook extends rcube_plugin
 	{
 		$rcmail = rcmail::get_instance();
 		$this->load_config();
+		$this->add_texts('localization/');
+
 		$this->user_name = $rcmail->config->get('globaladdressbook_user');
 		$this->user_name = str_replace('%d', $rcmail->user->get_username('domain'), $this->user_name);
 		$this->user_name = str_replace('%h', $_SESSION['imap_host'], $this->user_name);
 		$this->readonly = $this->_is_readonly();
 		$this->groups = $rcmail->config->get('globaladdressbook_groups', false);
+		$this->name = $this->gettext('globaladdressbook');
 
 		// check if the global address book user exists
 		if (!($user = rcube_user::query($this->user_name, $this->host))) {
@@ -56,8 +60,7 @@ class globaladdressbook extends rcube_plugin
 
 	public function address_sources($args)
 	{
-		$this->add_texts('localization/');
-		$args['sources'][$this->abook_id] = array('id' => $this->abook_id, 'name' => $this->gettext('globaladdressbook'), 'readonly' => $this->readonly, 'groups' => $this->groups);
+		$args['sources'][$this->abook_id] = array('id' => $this->abook_id, 'name' => $this->name, 'readonly' => $this->readonly, 'groups' => $this->groups);
 		return $args;
 	}
 
@@ -67,6 +70,7 @@ class globaladdressbook extends rcube_plugin
 			$args['instance'] = new rcube_contacts(rcmail::get_instance()->db, $this->user_id);
 			$args['instance']->readonly = $this->readonly;
 			$args['instance']->groups = $this->groups;
+			$args['instance']->name = $this->name;
 		}
 
 		return $args;
