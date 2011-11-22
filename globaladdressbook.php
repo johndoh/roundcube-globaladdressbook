@@ -5,7 +5,7 @@
  *
  * Plugin to add a global address book
  *
- * @version 1.4
+ * @version @package_version@
  * @author Philip Weir
  */
 class globaladdressbook extends rcube_plugin

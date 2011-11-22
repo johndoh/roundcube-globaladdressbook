@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.9.0" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+	http://pear.php.net/dtd/tasks-1.0.xsd
+	http://pear.php.net/dtd/package-2.0
+	http://pear.php.net/dtd/package-2.0.xsd">
+	<name>globaladdressbook</name>
+	<channel>pear.roundcube.net</channel>
+	<summary>Add a global address book to the system</summary>
+	<description>Adds an SQL based global address book to Roundcube. It can be global per installation, per IMAP host or per domain.</description>
+	<lead>
+		<name>Philip Weir</name>
+		<user>JohnDoh</user>
+		<email>roundcube@tehinterweb.co.uk</email>
+		<active>yes</active>
+	</lead>
+	<date>2011-11-20</date>
+	<time>12:02:14</time>
+	<version>
+		<release>1.4</release>
+		<api>1.4</api>
+	</version>
+	<stability>
+		<release>stable</release>
+		<api>stable</api>
+	</stability>
+	<license uri="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPLv2</license>
+	<notes>Repo only</notes>
+	<contents>
+		<dir baseinstalldir="/" name="/">
+			<file name="globaladdressbook.php" role="php">
+				<tasks:replace from="@name@" to="name" type="package-info"/>
+				<tasks:replace from="@package_version@" to="version" type="package-info"/>
+			</file>
+			<file name="config.inc.php.dist" role="data"/>
+			<file name="CHANGELOG" role="data"/>
+			<file name="README" role="data"/>
+			<file name="localization/de_CH.inc" role="data"/>
+			<file name="localization/de_DE.inc" role="data"/>
+			<file name="localization/en_GB.inc" role="data"/>
+			<file name="localization/en_US.inc" role="data"/>
+			<file name="localization/es_AR.inc" role="data"/>
+			<file name="localization/es_ES.inc" role="data"/>
+			<file name="localization/gl_ES.inc" role="data"/>
+			<file name="localization/hu_HU.inc" role="data"/>
+			<file name="localization/ja_JP.inc" role="data"/>
+			<file name="localization/nl_NL.inc" role="data"/>
+			<file name="localization/pl_PL.inc" role="data"/>
+			<file name="localization/ro_RO.inc" role="data"/>
+			<file name="localization/ru_RU.inc" role="data"/>
+			<file name="localization/tr_TR.inc" role="data"/>
+		</dir>
+		<!-- / -->
+	</contents>
+	<dependencies>
+		<required>
+			<php>
+				<min>5.2.1</min>
+			</php>
+			<pearinstaller>
+				<min>1.7.0</min>
+			</pearinstaller>
+		</required>
+	</dependencies>
+	<phprelease/>
+</package>
