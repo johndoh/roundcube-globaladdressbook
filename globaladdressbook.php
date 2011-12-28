@@ -10,7 +10,7 @@
  */
 class globaladdressbook extends rcube_plugin
 {
-	public $task = 'mail|addressbook';
+	public $task = 'mail|addressbook|dummy';
 	private $abook_id = 'global';
 	private $readonly;
 	private $groups;
