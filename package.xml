@@ -48,6 +48,7 @@
 			<file name="localization/ro_RO.inc" role="data"/>
 			<file name="localization/ru_RU.inc" role="data"/>
 			<file name="localization/tr_TR.inc" role="data"/>
+			<file name="localization/zh_TW.inc" role="data"/>
 		</dir>
 		<!-- / -->
 	</contents>
