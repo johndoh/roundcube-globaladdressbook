@@ -21,7 +21,7 @@ class globaladdressbook extends rcube_plugin
 
 	public function init()
 	{
-		$rcmail = rcmail::get_instance();
+		$rcmail = rcube::get_instance();
 		$this->load_config();
 		$this->add_texts('localization/');
 
@@ -67,7 +67,7 @@ class globaladdressbook extends rcube_plugin
 	public function get_address_book($args)
 	{
 		if ($args['id'] === $this->abook_id) {
-			$args['instance'] = new rcube_contacts(rcmail::get_instance()->db, $this->user_id);
+			$args['instance'] = new rcube_contacts(rcube::get_instance()->db, $this->user_id);
 			$args['instance']->readonly = $this->readonly;
 			$args['instance']->groups = $this->groups;
 			$args['instance']->name = $this->name;
@@ -78,7 +78,7 @@ class globaladdressbook extends rcube_plugin
 
 	private function _is_readonly()
 	{
-		$rcmail = rcmail::get_instance();
+		$rcmail = rcube::get_instance();
 
 		if (!$rcmail->config->get('globaladdressbook_readonly'))
 			return false;
