@@ -56,6 +56,7 @@ class globaladdressbook extends rcube_plugin
 
 		$this->add_hook('addressbooks_list', array($this, 'address_sources'));
 		$this->add_hook('addressbook_get', array($this, 'get_address_book'));
+		$this->add_hook('message_check_safe', array($this, 'message_check_safe'));
 	}
 
 	public function address_sources($args)
@@ -74,6 +75,19 @@ class globaladdressbook extends rcube_plugin
 		}
 
 		return $args;
+	}
+
+	public function message_check_safe($args)
+	{
+		$rcmail = rcube::get_instance();
+		$contacts = $rcmail->get_address_book($this->abook_id);
+
+		if ($contacts) {
+			$result = $contacts->search('email', $args['message']->sender['mailto'], 1, false);
+			if ($result->count) {
+				$args['message']->set_safe(true);
+			}
+		}
 	}
 
 	private function _is_readonly()
