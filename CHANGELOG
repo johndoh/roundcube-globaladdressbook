@@ -1,6 +1,10 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+Version 1.7 (2013-05-193, rc-1.0)
+=================================================
+ **** code branching/tagging no longer sync'd to roundcube versions ****
+
 Version 1.6 (2013-03-03, rc-0.9)
 =================================================
  * Update for Roundcube framework
