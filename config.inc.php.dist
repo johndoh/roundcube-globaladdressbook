@@ -25,4 +25,7 @@ $config['globaladdressbook_admin'] = null;
 // show addresses from the global address book in the auto complete menu when composing an email
 $config['globaladdressbook_autocomplete'] = true;
 
+// check globaladdressbook for known senders when displaying remote inline images
+$config['globaladdressbook_check_safe'] = true;
+
 ?>

@@ -56,6 +56,9 @@ class globaladdressbook extends rcube_plugin
 
 		$this->add_hook('addressbooks_list', array($this, 'address_sources'));
 		$this->add_hook('addressbook_get', array($this, 'get_address_book'));
+
+		if ($rcmail->config->get('globaladdressbook_check_safe'))
+			$this->add_hook('message_check_safe', array($this, 'check_known_senders'));
 	}
 
 	public function address_sources($args)
@@ -71,6 +74,23 @@ class globaladdressbook extends rcube_plugin
 			$args['instance']->readonly = $this->readonly;
 			$args['instance']->groups = $this->groups;
 			$args['instance']->name = $this->name;
+		}
+
+		return $args;
+	}
+
+	public function check_known_senders($args)
+	{
+		// don't bother checking if the message is already marked as safe
+		if ($args['message']->is_safe)
+			return;
+
+		$contacts = rcube::get_instance()->get_address_book($this->abook_id);
+		if ($contacts) {
+			$result = $contacts->search('email', $args['message']->sender['mailto'], 1, false);
+			if ($result->count) {
+				$args['message']->set_safe(true);
+			}
 		}
 
 		return $args;
