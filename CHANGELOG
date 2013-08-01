@@ -1,6 +1,9 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+ * Add support for new message_check_safe hook
+ * Update config file var names to match core
+
 Version 1.7 (2013-05-193, rc-1.0)
 =================================================
  **** code branching/tagging no longer sync'd to roundcube versions ****
