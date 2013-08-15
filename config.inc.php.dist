@@ -4,7 +4,7 @@
  * GlobalAddressbook configuration file
  */
 
-// the name of the dummy which holds the global address book, if the user does not exist it will be created
+// the name of the dummy user which holds the global address book, if the user does not exist it will be created
 // the name can contain the following macros that will be expanded as follows:
 //      %d is replaced with the domain part of the username (if the username is an email address or default mail domain if not)
 //      %h is replaced with the imap host (from the session info)
