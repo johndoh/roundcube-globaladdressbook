@@ -32,6 +32,12 @@ class globaladdressbook extends rcube_plugin
 		$this->groups = $rcmail->config->get('globaladdressbook_groups', false);
 		$this->name = $this->gettext('globaladdressbook');
 
+		// email2user hook can be used by other plugins to do post processing on usernames, not just virtual user lookup
+		// matches process of user lookup and creation in the core
+		if (strpos($this->user_name, '@') && ($virtuser = rcube_user::email2user($this->user_name))) {
+			$this->user_name = $virtuser;
+		}
+
 		// check if the global address book user exists
 		if (!($user = rcube_user::query($this->user_name, $this->host))) {
 			// this action overrides the current user information so make a copy and then restore it

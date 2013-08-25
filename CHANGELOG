@@ -1,6 +1,7 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+ * Call email2user conversion for usernames with @ in (incase of username post processing)
  * Add support for new message_check_safe hook
  * Update config file var names to match core
 
