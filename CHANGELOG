@@ -1,6 +1,9 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+ * Replace globaladdressbook_readonly option with globaladdressbook_perms
+ * Add option to disable "move" operation for contacts
+
 Version 1.8 (2013-12-01, rc-1.0)
 =================================================
  * Call email2user conversion for usernames with @ in (incase of username post processing)

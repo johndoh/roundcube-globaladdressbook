@@ -53,10 +53,21 @@ follows:
 * %d is replaced with the domain part of the logged in user's username
 * %h is replaced with the imap host (from the session info)
 
-**'readonly'**
+**'perms'**
 
-Make address book read only, users will not be able to edit the contents of the
-address book or add new contacts
+Restrict the actions that can be performed by users in the global address book
+* 0 - global address book is read only
+* 1 - users can add, edit and delete contacts (full permissions)
+* 2 - users can add but not edit or delete contacts
+* 3 - users can add and edit but not delete contacts
+
+**NB:** The globaladdressbook_readonly option was deprecated in version 1.9,
+replaced by globaladdressbook_perms.
+
+**'force_copy'**
+
+Always copy a contact from the global address book to another one, for example
+when using drag 'n drop. Default behaviour is to move the contact.
 
 **'groups'**
 
@@ -76,6 +87,12 @@ if the address book is set to read only. The follow options are available:
 **'autocomplete'**
 
 Show contacts from this book in the auto complete menu when composing an email
+
+**'check_safe'**
+
+Use addresses in the global address book to identify known senders before
+displaying remote inline images in HTML messages (in addition to other
+configured address books).
 
 [rcplugrepo]: http://plugins.roundcube.net/packages/johndoh/globaladdressbook
 [releases]: http://github.com/JohnDoh/Roundcube-Plugin-Global-Address-Book/releases
