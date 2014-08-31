@@ -18,7 +18,7 @@ $config['globaladdressbook_user'] = '[global_addressbook_user]';
 // 3 - users can add and edit but not delete contacts
 $config['globaladdressbook_perms'] = 0;
 
-// alway copy contacts from the global address book to another, never move
+// always copy contacts from the global address book to another address book, never move
 $config['globaladdressbook_force_copy'] = true;
 
 // allow groups in global address book
