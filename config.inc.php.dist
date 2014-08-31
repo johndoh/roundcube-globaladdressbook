@@ -11,8 +11,15 @@
 // eg. to create one global address book per domain: global_addressbook@%d
 $config['globaladdressbook_user'] = '[global_addressbook_user]';
 
-// make global address book read only
-$config['globaladdressbook_readonly'] = true;
+// default user permissions
+// 0 - global address book is read only
+// 1 - users can add, edit and delete contacts (full permissions)
+// 2 - users can add but not edit or delete contacts
+// 3 - users can add and edit but not delete contacts
+$config['globaladdressbook_perms'] = 0;
+
+// always copy contacts from the global address book to another address book, never move
+$config['globaladdressbook_force_copy'] = true;
 
 // allow groups in global address book
 $config['globaladdressbook_groups'] = false;

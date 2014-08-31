@@ -12,7 +12,7 @@ class globaladdressbook extends rcube_plugin
 {
 	public $task = 'mail|addressbook|settings|dummy';
 	private $abook_id = 'global';
-	private $readonly;
+	private $readonly = true;
 	private $groups;
 	private $name;
 	private $user_id;
@@ -28,9 +28,9 @@ class globaladdressbook extends rcube_plugin
 		$this->user_name = $rcmail->config->get('globaladdressbook_user');
 		$this->user_name = str_replace('%d', $rcmail->user->get_username('domain'), $this->user_name);
 		$this->user_name = str_replace('%h', $_SESSION['storage_host'], $this->user_name);
-		$this->readonly = $this->_is_readonly();
 		$this->groups = $rcmail->config->get('globaladdressbook_groups', false);
 		$this->name = $this->gettext('globaladdressbook');
+		$this->_set_permissions();
 
 		// email2user hook can be used by other plugins to do post processing on usernames, not just virtual user lookup
 		// matches process of user lookup and creation in the core
@@ -102,27 +102,61 @@ class globaladdressbook extends rcube_plugin
 		return $args;
 	}
 
-	private function _is_readonly()
+	private function _set_permissions()
 	{
 		$rcmail = rcube::get_instance();
+		$isAdmin = false;
 
-		if (!$rcmail->config->get('globaladdressbook_readonly'))
-			return false;
+		// fix deprecated globaladdressbook_readonly option removed 20140525
+		if ($rcmail->config->get('globaladdressbook_perms') === null) {
+			$rcmail->config->set('globaladdressbook_perms', $rcmail->config->get('globaladdressbook_readonly') ? 0 : 1);
+		}
 
+		// check for full permissions
+		$perms = $rcmail->config->get('globaladdressbook_perms');
+		if (in_array($perms, array(1, 2, 3))) {
+			$this->readonly = false;
+		}
+
+		// check if the user is an admin
 		if ($admin = $rcmail->config->get('globaladdressbook_admin')) {
-			if (!is_array($admin)) $admin = array($admin);
+			if (!is_array($admin)) {
+				$admin = array($admin);
+			}
 
 			foreach ($admin as $user) {
 				if (strpos($user, '/') == 0 && substr($user, -1) == '/') {
-					if (preg_match($user, $_SESSION['username']))
-						return false;
+					if (preg_match($user, $_SESSION['username'])) {
+						$this->readonly = false;
+						$isAdmin = true;
+					}
 				}
-				elseif ($user == $_SESSION['username'])
-					return false;
+				elseif ($user == $_SESSION['username']) {
+					$this->readonly = false;
+					$isAdmin = true;
+				}
 			}
 		}
 
-		return true;
+		// check for task specific permissions
+		if ($rcmail->task == 'addressbook' && rcube_utils::get_input_value('_source', rcube_utils::INPUT_GPC) == $this->abook_id) {
+			if ($rcmail->action == 'move' && $rcmail->config->get('globaladdressbook_force_copy')) {
+				$rcmail->overwrite_action('copy');
+				$this->api->output->command('list_contacts');
+			}
+
+			// do not override permissions for admins
+			if (!$isAdmin && !$this->readonly) {
+				if (in_array($rcmail->action, array('show', 'edit')) && in_array($perms, array(2))) {
+					$this->readonly = true;
+				}
+				elseif ($rcmail->action == 'delete' && in_array($perms, array(2, 3))) {
+					$this->api->output->command('display_message', $this->gettext('errornoperm'), 'info');
+					$this->api->output->command('list_contacts');
+					$this->api->output->send();
+				}
+			}
+		}
 	}
 }
 
