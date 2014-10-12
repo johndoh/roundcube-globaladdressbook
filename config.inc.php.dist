@@ -8,6 +8,7 @@
 // the name can contain the following macros that will be expanded as follows:
 //      %d is replaced with the domain part of the username (if the username is an email address or default mail domain if not)
 //      %h is replaced with the imap host (from the session info)
+//      %c is replaced with the last part from a username (for example user1.domainname will be domainname)
 // eg. to create one global address book per domain: global_addressbook@%d
 $config['globaladdressbook_user'] = '[global_addressbook_user]';
 

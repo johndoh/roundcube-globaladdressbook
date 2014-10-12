@@ -25,9 +25,7 @@ class globaladdressbook extends rcube_plugin
 		$this->load_config();
 		$this->add_texts('localization/');
 
-		$this->user_name = $rcmail->config->get('globaladdressbook_user');
-		$this->user_name = str_replace('%d', $rcmail->user->get_username('domain'), $this->user_name);
-		$this->user_name = str_replace('%h', $_SESSION['storage_host'], $this->user_name);
+        $this->user_name = $this->getUser($rcmail);
 		$this->groups = $rcmail->config->get('globaladdressbook_groups', false);
 		$this->name = $this->gettext('globaladdressbook');
 		$this->_set_permissions();
@@ -66,6 +64,46 @@ class globaladdressbook extends rcube_plugin
 		if ($rcmail->config->get('globaladdressbook_check_safe'))
 			$this->add_hook('message_check_safe', array($this, 'check_known_senders'));
 	}
+
+
+    /**
+     * Get username for global addressbook,
+     *
+     * @param rcmail $rcMail
+     * @return string
+     */
+    private function getUser(rcmail $rcMail)
+    {
+        $userName = $rcMail->config->get('globaladdressbook_user');
+        if(strpos($userName, '%c') !== false) {
+            $delimiter = $rcMail->config->get('globaladdressbook_delimiter');
+            if ($delimiter === null || $delimiter === '') {
+                $delimiter = '.';
+            }
+
+            $domainParts = explode('@', $rcMail->user->get_username('username'));
+            if(isset($domainParts[0])) {
+                $userParts = explode($delimiter, $domainParts[0]);
+                $length = count($userParts);
+                if(isset($userParts[$length - 1])) {
+                    $userName = $userParts[$length - 1];
+                }
+            }
+
+            return $userName;
+        }
+
+        if(strpos($userName, '%d') !== false) {
+            return str_replace('%d', $rcMail->user->get_username('domain'), $this->user_name);
+        }
+
+        if(strpos($userName, '%h') !== false) {
+            return str_replace('%h', $_SESSION['storage_host'], $this->user_name);
+        }
+
+        return $userName;
+    }
+
 
 	public function address_sources($args)
 	{
