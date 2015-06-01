@@ -44,7 +44,7 @@ class globaladdressbook extends rcube_plugin
 		$this->load_config();
 		$this->add_texts('localization/');
 
-		$this->user_name = $rcmail->config->get('globaladdressbook_user');
+		$this->user_name = $rcmail->config->get('globaladdressbook_user', '[global_addressbook_user]');
 		$this->user_name = str_replace('%d', $rcmail->user->get_username('domain'), $this->user_name);
 		$this->user_name = str_replace('%h', $_SESSION['storage_host'], $this->user_name);
 		$this->groups = $rcmail->config->get('globaladdressbook_groups', false);
