@@ -34,5 +34,3 @@ $config['globaladdressbook_autocomplete'] = true;
 
 // check globaladdressbook for known senders when displaying remote inline images
 $config['globaladdressbook_check_safe'] = true;
-
-?>

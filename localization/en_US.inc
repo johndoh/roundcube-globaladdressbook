@@ -5,5 +5,3 @@ $labels = array();
 $labels['globaladdressbook'] = 'Global Addresses';
 
 $messages = array();
-
-?>
