@@ -1,6 +1,8 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+ * Add %i macro to get domain from default identity
+
 Version 1.9 (2014-08-31, rc-1.0)
 =================================================
  * Replace globaladdressbook_readonly option with globaladdressbook_perms
