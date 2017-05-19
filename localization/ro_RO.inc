@@ -5,5 +5,3 @@ $labels = array();
 $labels['globaladdressbook'] = 'Agendă globală';
 
 $messages = array();
-
-?>

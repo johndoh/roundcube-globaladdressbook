@@ -5,7 +5,6 @@
  *
  * Plugin to add a global address book
  *
- * @version @package_version@
  * @author Philip Weir
  *
  * Copyright (C) 2009-2014 Philip Weir
@@ -44,9 +43,7 @@ class globaladdressbook extends rcube_plugin
 		$this->load_config();
 		$this->add_texts('localization/');
 
-		$this->user_name = $rcmail->config->get('globaladdressbook_user', '[global_addressbook_user]');
-		$this->user_name = str_replace('%d', $rcmail->user->get_username('domain'), $this->user_name);
-		$this->user_name = str_replace('%h', $_SESSION['storage_host'], $this->user_name);
+		$this->user_name = globaladdressbook::parse_user($rcmail->config->get('globaladdressbook_user', '[global_addressbook_user]'));
 		$this->groups = $rcmail->config->get('globaladdressbook_groups', false);
 		$this->name = $this->gettext('globaladdressbook');
 		$this->_set_permissions();
@@ -119,6 +116,24 @@ class globaladdressbook extends rcube_plugin
 		}
 
 		return $args;
+	}
+
+	public static function parse_user($name)
+	{
+		$user = rcube::get_instance()->user;
+
+		// %h - IMAP host
+		$h = $_SESSION['storage_host'];
+		// %d - domain name after the '@' from username
+		$d = $user->get_username('domain');
+		// %i - domain name after the '@' from e-mail address of default identity
+		if (strpos($name, '%i') !== false) {
+			$user_ident = $user->list_emails(true);
+			list($local, $domain) = explode('@', $user_ident['email']);
+			$i = $domain;
+		}
+
+		return str_replace(array('%h', '%d', '%i'), array($h, $d, $i), $name);
 	}
 
 	private function _set_permissions()
