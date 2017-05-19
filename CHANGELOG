@@ -1,6 +1,8 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+Version 1.10 (2017-05-19, rc-1.0)
+=================================================
  * Add %i macro to get domain from default identity
 
 Version 1.9 (2014-08-31, rc-1.0)
