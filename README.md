@@ -94,6 +94,6 @@ Use addresses in the global address book to identify known senders before
 displaying remote inline images in HTML messages (in addition to other
 configured address books).
 
-[rcplugrepo]: http://plugins.roundcube.net/packages/johndoh/globaladdressbook
-[releases]: http://github.com/JohnDoh/Roundcube-Plugin-Global-Address-Book/releases
-[gpl]: http://www.gnu.org/licenses/gpl.html
+[rcplugrepo]: https://plugins.roundcube.net/packages/johndoh/globaladdressbook
+[releases]: https://github.com/johndoh/roundcube-globaladdressbook/releases
+[gpl]: https://www.gnu.org/licenses/gpl.html

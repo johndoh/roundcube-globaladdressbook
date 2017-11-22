@@ -2,7 +2,7 @@
   "name": "johndoh/globaladdressbook",
   "description": "Add a global address book to Roundcube",
   "keywords": ["global","address","book"],
-  "homepage": "http://github.com/JohnDoh/Roundcube-Plugin-Global-Address-Book/",
+  "homepage": "https://github.com/johndoh/roundcube-globaladdressbook/",
   "license": "GPL-3.0",
   "type": "roundcube-plugin",
   "version": "1.10",
@@ -16,7 +16,7 @@
   "repositories": [
     {
       "type": "composer",
-      "url": "http://plugins.roundcube.net"
+      "url": "https://plugins.roundcube.net"
     }
   ],
   "require": {
