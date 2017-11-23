@@ -28,7 +28,6 @@
  */
 class globaladdressbook extends rcube_plugin
 {
-    public $task = 'mail|addressbook|settings|dummy';
     private $abook_id = 'global';
     private $readonly = true;
     private $groups;
@@ -40,6 +39,11 @@ class globaladdressbook extends rcube_plugin
     public function init()
     {
         $rcmail = rcube::get_instance();
+
+        // not logged in, exit
+        if (empty($rcmail->user->ID))
+            return;
+
         $this->load_config();
         $this->add_texts('localization/');
 
