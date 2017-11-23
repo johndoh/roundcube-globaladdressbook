@@ -7,7 +7,7 @@
  *
  * @author Philip Weir
  *
- * Copyright (C) 2009-2014 Philip Weir
+ * Copyright (C) 2009-2017 Philip Weir
  *
  * This program is a Roundcube (https://roundcube.net) plugin.
  * For more information see README.md.
@@ -30,45 +30,47 @@ class globaladdressbook extends rcube_plugin
 {
     private $abook_id = 'global';
     private $readonly = true;
-    private $groups;
+    private $groups = false;
     private $name;
     private $user_id;
-    private $user_name;
-    private $host = 'localhost';
 
     public function init()
     {
         $rcmail = rcube::get_instance();
 
-        // not logged in, exit
-        if (empty($rcmail->user->ID))
+        // make sure the user is logged in
+        if (empty($rcmail->user->ID)) {
             return;
+        }
 
         $this->load_config();
         $this->add_texts('localization/');
 
-        $this->user_name = self::parse_user($rcmail->config->get('globaladdressbook_user', '[global_addressbook_user]'));
+        $username = self::parse_user($rcmail->config->get('globaladdressbook_user', '[global_addressbook_user]'));
+        $host = 'localhost';
+
         $this->groups = $rcmail->config->get('globaladdressbook_groups', false);
         $this->name = $this->gettext('globaladdressbook');
         $this->_set_permissions();
 
         // email2user hook can be used by other plugins to do post processing on usernames, not just virtual user lookup
         // matches process of user lookup and creation in the core
-        if (strpos($this->user_name, '@') && ($virtuser = rcube_user::email2user($this->user_name))) {
-            $this->user_name = $virtuser;
+        if (strpos($username, '@') && ($virtuser = rcube_user::email2user($username))) {
+            $username = $virtuser;
         }
 
         // check if the global address book user exists
-        if (!($user = rcube_user::query($this->user_name, $this->host))) {
+        if (!($user = rcube_user::query($username, $host))) {
             // this action overrides the current user information so make a copy and then restore it
             $cur_user = $rcmail->user;
-            $user = rcube_user::create($this->user_name, $this->host);
+            $user = rcube_user::create($username, $host);
             $rcmail->user = $cur_user;
 
             // prevent new_user_dialog plugin from triggering
             $_SESSION['plugin.newuserdialog'] = false;
         }
 
+        // global address book user ID
         $this->user_id = $user->ID;
 
         // use this address book for autocompletion queries
