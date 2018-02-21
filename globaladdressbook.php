@@ -51,7 +51,7 @@ class globaladdressbook extends rcube_plugin
 
         // email2user hook can be used by other plugins to do post processing on usernames, not just virtual user lookup
         // matches process of user lookup and creation in the core
-        if (strpos($username, '@') && ($virtuser = rcube_user::email2user($username))) {
+        if (strpos($username, '@') !== false && ($virtuser = rcube_user::email2user($username))) {
             $username = $virtuser;
         }
 
@@ -163,15 +163,10 @@ class globaladdressbook extends rcube_plugin
             }
 
             foreach ($admin as $user) {
-                if (strpos($user, '/') == 0 && substr($user, -1) == '/') {
-                    if (preg_match($user, $_SESSION['username'])) {
-                        $this->readonly = false;
-                        $isAdmin = true;
-                    }
-                }
-                elseif ($user == $_SESSION['username']) {
+                if ($user == $_SESSION['username'] || @preg_match($user, $_SESSION['username']) !== false) {
                     $this->readonly = false;
                     $isAdmin = true;
+                    break;
                 }
             }
         }
