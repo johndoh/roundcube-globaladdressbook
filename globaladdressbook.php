@@ -69,17 +69,17 @@ class globaladdressbook extends rcube_plugin
         // global address book user ID
         $this->user_id = $user->ID;
 
+        $this->add_hook('addressbooks_list', array($this, 'address_sources'));
+        $this->add_hook('addressbook_get', array($this, 'get_address_book'));
+
         // use this address book for autocompletion queries
         if ($rcmail->config->get('globaladdressbook_autocomplete')) {
-            $sources = $rcmail->config->get('autocomplete_addressbooks', array('sql'));
+            $sources = (array) $rcmail->config->get('autocomplete_addressbooks', 'sql');
             if (!in_array($this->abook_id, $sources)) {
                 $sources[] = $this->abook_id;
                 $rcmail->config->set('autocomplete_addressbooks', $sources);
             }
         }
-
-        $this->add_hook('addressbooks_list', array($this, 'address_sources'));
-        $this->add_hook('addressbook_get', array($this, 'get_address_book'));
 
         if ($rcmail->config->get('globaladdressbook_check_safe')) {
             $this->add_hook('message_check_safe', array($this, 'check_known_senders'));
