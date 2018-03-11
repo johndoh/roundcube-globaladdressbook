@@ -72,8 +72,8 @@ if the address book is set to read only. The follow options are available:
   'admin@domain.com'
 * If you wish give admin rights to multiple users then enter the usernames in
   an array like: array('admin1@domain.com', 'admin2@domain.com')
-* You can also use regual expressions to match the admin username, regular
-  expressions must be started and finished the a '/'. Eg: '/^admin@/'
+* You can also use regular expressions to match the admin username.
+  Eg: '/^admin@/i'
 
 **'autocomplete'**
 
@@ -85,4 +85,4 @@ Use addresses in the global address book to identify known senders before
 displaying remote inline images in HTML messages (in addition to other
 configured address books).
 
-[gpl]: http://www.gnu.org/licenses/gpl.html
+[gpl]: https://www.gnu.org/licenses/gpl.html

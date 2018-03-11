@@ -1,6 +1,11 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+Version 1.11 (2018-03-11, rc-1.0)
+=================================================
+ * Include plugin in all tasks
+ * Better support when using regex for admin ids
+
 Version 1.10 (2017-05-19, rc-1.0)
 =================================================
  * Add %i macro to get domain from default identity
