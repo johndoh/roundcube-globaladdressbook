@@ -35,3 +35,7 @@ $config['globaladdressbook_autocomplete'] = true;
 
 // check globaladdressbook for known senders when displaying remote inline images
 $config['globaladdressbook_check_safe'] = true;
+
+// activate GlobalAddressbook for selected mail hosts only. If this is not set all mail hosts are allowed.
+// example: $config['globaladdressbook_allowed_hosts'] = array('mail1.domain.tld', 'mail2.domain.tld');
+$config['globaladdressbook_allowed_hosts'] = null;

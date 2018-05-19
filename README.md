@@ -94,6 +94,11 @@ Use addresses in the global address book to identify known senders before
 displaying remote inline images in HTML messages (in addition to other
 configured address books).
 
+**'allowed_hosts'**
+
+Activate GlobalAddressbook for selected mail hosts only. If this is not set all
+mail hosts are allowed.
+
 [rcplugrepo]: https://plugins.roundcube.net/packages/johndoh/globaladdressbook
 [releases]: https://github.com/johndoh/roundcube-globaladdressbook/releases
 [gpl]: https://www.gnu.org/licenses/gpl.html

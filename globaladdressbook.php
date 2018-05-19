@@ -40,6 +40,13 @@ class globaladdressbook extends rcube_plugin
         $rcmail = rcube::get_instance();
 
         $this->load_config();
+
+        // Host exceptions
+        $hosts = $rcmail->config->get('globaladdressbook_allowed_hosts');
+        if (!empty($hosts) && !in_array($_SESSION['storage_host'], (array) $hosts)) {
+            return;
+        }
+
         $this->add_texts('localization/');
 
         $username = self::parse_user($rcmail->config->get('globaladdressbook_user', '[global_addressbook_user]'));
