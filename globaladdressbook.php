@@ -34,25 +34,26 @@ class globaladdressbook extends rcube_plugin
     private $groups = false;
     private $name;
     private $user_id;
+    private $rcube;
 
     public function init()
     {
-        $rcmail = rcube::get_instance();
+        $this->rcube = rcube::get_instance();
 
         $this->load_config();
 
         // Host exceptions
-        $hosts = $rcmail->config->get('globaladdressbook_allowed_hosts');
+        $hosts = $this->rcube->config->get('globaladdressbook_allowed_hosts');
         if (!empty($hosts) && !in_array($_SESSION['storage_host'], (array) $hosts)) {
             return;
         }
 
         $this->add_texts('localization/');
 
-        $username = self::parse_user($rcmail->config->get('globaladdressbook_user', '[global_addressbook_user]'));
+        $username = self::parse_user($this->rcube->config->get('globaladdressbook_user', '[global_addressbook_user]'));
         $host = 'localhost';
 
-        $this->groups = $rcmail->config->get('globaladdressbook_groups', false);
+        $this->groups = $this->rcube->config->get('globaladdressbook_groups', false);
         $this->name = $this->gettext('globaladdressbook');
         $this->_set_permissions();
 
@@ -65,9 +66,9 @@ class globaladdressbook extends rcube_plugin
         // check if the global address book user exists
         if (!($user = rcube_user::query($username, $host))) {
             // this action overrides the current user information so make a copy and then restore it
-            $cur_user = $rcmail->user;
+            $cur_user = $this->rcube->user;
             $user = rcube_user::create($username, $host);
-            $rcmail->user = $cur_user;
+            $this->rcube->user = $cur_user;
 
             // prevent new_user_dialog plugin from triggering
             $_SESSION['plugin.newuserdialog'] = false;
@@ -80,15 +81,15 @@ class globaladdressbook extends rcube_plugin
         $this->add_hook('addressbook_get', array($this, 'get_address_book'));
 
         // use this address book for autocompletion queries
-        if ($rcmail->config->get('globaladdressbook_autocomplete')) {
-            $sources = (array) $rcmail->config->get('autocomplete_addressbooks', 'sql');
+        if ($this->rcube->config->get('globaladdressbook_autocomplete')) {
+            $sources = (array) $this->rcube->config->get('autocomplete_addressbooks', 'sql');
             if (!in_array($this->abook_id, $sources)) {
                 $sources[] = $this->abook_id;
-                $rcmail->config->set('autocomplete_addressbooks', $sources);
+                $this->rcube->config->set('autocomplete_addressbooks', $sources);
             }
         }
 
-        if ($rcmail->config->get('globaladdressbook_check_safe')) {
+        if ($this->rcube->config->get('globaladdressbook_check_safe')) {
             $this->add_hook('message_check_safe', array($this, 'check_known_senders'));
         }
     }
@@ -103,7 +104,7 @@ class globaladdressbook extends rcube_plugin
     public function get_address_book($args)
     {
         if ($args['id'] === $this->abook_id) {
-            $args['instance'] = new rcube_contacts(rcube::get_instance()->db, $this->user_id);
+            $args['instance'] = new rcube_contacts($this->rcube->db, $this->user_id);
             $args['instance']->readonly = $this->readonly;
             $args['instance']->groups = $this->groups;
             $args['instance']->name = $this->name;
@@ -118,7 +119,7 @@ class globaladdressbook extends rcube_plugin
         if ($args['message']->is_safe) {
             return;
         }
-        $contacts = rcube::get_instance()->get_address_book($this->abook_id);
+        $contacts = $this->rcube->get_address_book($this->abook_id);
         if ($contacts) {
             $result = $contacts->search('email', $args['message']->sender['mailto'], 1, false);
             if ($result->count) {
@@ -149,22 +150,21 @@ class globaladdressbook extends rcube_plugin
 
     private function _set_permissions()
     {
-        $rcmail = rcube::get_instance();
         $isAdmin = false;
 
         // fix deprecated globaladdressbook_readonly option removed 20140525
-        if ($rcmail->config->get('globaladdressbook_perms') === null) {
-            $rcmail->config->set('globaladdressbook_perms', $rcmail->config->get('globaladdressbook_readonly') ? 0 : 1);
+        if ($this->rcube->config->get('globaladdressbook_perms') === null) {
+            $this->rcube->config->set('globaladdressbook_perms', $this->rcube->config->get('globaladdressbook_readonly') ? 0 : 1);
         }
 
         // check for full permissions
-        $perms = $rcmail->config->get('globaladdressbook_perms');
+        $perms = $this->rcube->config->get('globaladdressbook_perms');
         if (in_array($perms, array(1, 2, 3))) {
             $this->readonly = false;
         }
 
         // check if the user is an admin
-        if ($admin = $rcmail->config->get('globaladdressbook_admin')) {
+        if ($admin = $this->rcube->config->get('globaladdressbook_admin')) {
             if (!is_array($admin)) {
                 $admin = array($admin);
             }
@@ -179,21 +179,21 @@ class globaladdressbook extends rcube_plugin
         }
 
         // check for task specific permissions
-        if ($rcmail->task == 'addressbook' && rcube_utils::get_input_value('_source', rcube_utils::INPUT_GPC) == $this->abook_id) {
-            if ($rcmail->action == 'move' && $rcmail->config->get('globaladdressbook_force_copy')) {
-                $rcmail->overwrite_action('copy');
-                $this->api->output->command('list_contacts');
+        if ($this->rcube->task == 'addressbook' && rcube_utils::get_input_value('_source', rcube_utils::INPUT_GPC) == $this->abook_id) {
+            if ($this->rcube->action == 'move' && $this->rcube->config->get('globaladdressbook_force_copy')) {
+                $this->rcube->overwrite_action('copy');
+                $this->rcube->output->command('list_contacts');
             }
 
             // do not override permissions for admins
             if (!$isAdmin && !$this->readonly) {
-                if (in_array($rcmail->action, array('show', 'edit')) && in_array($perms, array(2))) {
+                if (in_array($this->rcube->action, array('show', 'edit')) && in_array($perms, array(2))) {
                     $this->readonly = true;
                 }
-                elseif ($rcmail->action == 'delete' && in_array($perms, array(2, 3))) {
-                    $this->api->output->command('display_message', $this->gettext('errornoperm'), 'info');
-                    $this->api->output->command('list_contacts');
-                    $this->api->output->send();
+                elseif ($this->rcube->action == 'delete' && in_array($perms, array(2, 3))) {
+                    $this->rcube->output->command('display_message', $this->gettext('errornoperm'), 'info');
+                    $this->rcube->output->command('list_contacts');
+                    $this->rcube->output->send();
                 }
             }
         }
