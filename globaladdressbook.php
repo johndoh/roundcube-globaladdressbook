@@ -139,6 +139,7 @@ class globaladdressbook extends rcube_plugin
         // %d - domain name after the '@' from username
         $d = $user->get_username('domain');
         // %i - domain name after the '@' from e-mail address of default identity
+        $i = '';
         if (strpos($name, '%i') !== false) {
             $user_ident = $user->list_emails(true);
             list($local, $domain) = explode('@', $user_ident['email']);
@@ -158,7 +159,7 @@ class globaladdressbook extends rcube_plugin
         }
 
         // check for full permissions
-        $perms = $this->rcube->config->get('globaladdressbook_perms');
+        $perms = $this->rcube->config->get('globaladdressbook_perms', array());
         if (in_array($perms, array(1, 2, 3))) {
             $this->readonly = false;
         }
