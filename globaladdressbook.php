@@ -163,7 +163,7 @@ class globaladdressbook extends rcube_plugin
             }
 
             foreach ($admin as $user) {
-                if ($user == $_SESSION['username'] || @preg_match($user, $_SESSION['username']) !== false) {
+                if ($user == $_SESSION['username'] || @preg_match($user, $_SESSION['username']) === 1) {
                     $this->readonly = false;
                     $isAdmin = true;
                     break;
