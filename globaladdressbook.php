@@ -153,11 +153,6 @@ class globaladdressbook extends rcube_plugin
     {
         $isAdmin = false;
 
-        // fix deprecated globaladdressbook_readonly option removed 20140525
-        if ($this->rcube->config->get('globaladdressbook_perms') === null) {
-            $this->rcube->config->set('globaladdressbook_perms', $this->rcube->config->get('globaladdressbook_readonly') ? 0 : 1);
-        }
-
         // check for full permissions
         $perms = $this->rcube->config->get('globaladdressbook_perms', array());
         if (in_array($perms, array(1, 2, 3))) {

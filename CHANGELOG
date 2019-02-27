@@ -2,6 +2,7 @@ Roundcube Webmail GlobalAddressbook
 ===================================
 
  * Add globaladdressbook_allowed_hosts config option
+ * Remove support for depreciated config option globaladdressbook_readonly
 
 Version 1.11.1 (2019-02-26, rc-1.0)
 =================================================
