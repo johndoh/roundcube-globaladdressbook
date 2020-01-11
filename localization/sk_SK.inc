@@ -5,5 +5,3 @@ $labels = array();
 $labels['globaladdressbook'] = 'Globálny adresár';
 
 $messages = array();
-
-?>
