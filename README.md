@@ -99,6 +99,6 @@ configured address books).
 Activate GlobalAddressbook for selected mail hosts only. If this is not set all
 mail hosts are allowed.
 
-[rcplugrepo]: https://plugins.roundcube.net/packages/johndoh/globaladdressbook
+[rcplugrepo]: https://plugins.roundcube.net/#/packages/johndoh/globaladdressbook
 [releases]: https://github.com/johndoh/roundcube-globaladdressbook/releases
 [gpl]: https://www.gnu.org/licenses/gpl.html
