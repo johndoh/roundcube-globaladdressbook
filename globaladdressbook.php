@@ -77,8 +77,8 @@ class globaladdressbook extends rcube_plugin
         // global address book user ID
         $this->user_id = $user->ID;
 
-        $this->add_hook('addressbooks_list', array($this, 'address_sources'));
-        $this->add_hook('addressbook_get', array($this, 'get_address_book'));
+        $this->add_hook('addressbooks_list', [$this, 'address_sources']);
+        $this->add_hook('addressbook_get', [$this, 'get_address_book']);
 
         // use this address book for autocompletion queries
         if ($this->rcube->config->get('globaladdressbook_autocomplete')) {
@@ -90,13 +90,13 @@ class globaladdressbook extends rcube_plugin
         }
 
         if ($this->rcube->config->get('globaladdressbook_check_safe')) {
-            $this->add_hook('message_check_safe', array($this, 'check_known_senders'));
+            $this->add_hook('message_check_safe', [$this, 'check_known_senders']);
         }
     }
 
     public function address_sources($args)
     {
-        $args['sources'][$this->abook_id] = array('id' => $this->abook_id, 'name' => $this->name, 'readonly' => $this->readonly, 'groups' => $this->groups);
+        $args['sources'][$this->abook_id] = ['id' => $this->abook_id, 'name' => $this->name, 'readonly' => $this->readonly, 'groups' => $this->groups];
 
         return $args;
     }
@@ -146,7 +146,7 @@ class globaladdressbook extends rcube_plugin
             $i = $domain;
         }
 
-        return str_replace(array('%h', '%d', '%i'), array($h, $d, $i), $name);
+        return str_replace(['%h', '%d', '%i'], [$h, $d, $i], $name);
     }
 
     private function _set_permissions()
@@ -154,15 +154,15 @@ class globaladdressbook extends rcube_plugin
         $isAdmin = false;
 
         // check for full permissions
-        $perms = $this->rcube->config->get('globaladdressbook_perms', array());
-        if (in_array($perms, array(1, 2, 3))) {
+        $perms = $this->rcube->config->get('globaladdressbook_perms', []);
+        if (in_array($perms, [1, 2, 3])) {
             $this->readonly = false;
         }
 
         // check if the user is an admin
         if ($admin = $this->rcube->config->get('globaladdressbook_admin')) {
             if (!is_array($admin)) {
-                $admin = array($admin);
+                $admin = [$admin];
             }
 
             foreach ($admin as $user) {
@@ -183,10 +183,10 @@ class globaladdressbook extends rcube_plugin
 
             // do not override permissions for admins
             if (!$isAdmin && !$this->readonly) {
-                if (in_array($this->rcube->action, array('show', 'edit')) && in_array($perms, array(2))) {
+                if (in_array($this->rcube->action, ['show', 'edit']) && in_array($perms, [2])) {
                     $this->readonly = true;
                 }
-                elseif ($this->rcube->action == 'delete' && in_array($perms, array(2, 3))) {
+                elseif ($this->rcube->action == 'delete' && in_array($perms, [2, 3])) {
                     $this->rcube->output->command('display_message', $this->gettext('errornoperm'), 'info');
                     $this->rcube->output->command('list_contacts');
                     $this->rcube->output->send();
