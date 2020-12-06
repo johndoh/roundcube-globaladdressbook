@@ -154,7 +154,7 @@ class globaladdressbook extends rcube_plugin
         $isAdmin = false;
 
         // check for full permissions
-        $perms = $this->rcube->config->get('globaladdressbook_perms', []);
+        $perms = $this->rcube->config->get('globaladdressbook_perms', 0);
         if (in_array($perms, [1, 2, 3])) {
             $this->readonly = false;
         }
@@ -183,7 +183,7 @@ class globaladdressbook extends rcube_plugin
 
             // do not override permissions for admins
             if (!$isAdmin && !$this->readonly) {
-                if (in_array($this->rcube->action, ['show', 'edit']) && in_array($perms, [2])) {
+                if (in_array($this->rcube->action, ['show', 'edit']) && $perms == 2) {
                     $this->readonly = true;
                 }
                 elseif ($this->rcube->action == 'delete' && in_array($perms, [2, 3])) {
