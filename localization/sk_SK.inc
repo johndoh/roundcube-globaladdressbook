@@ -1,7 +1,7 @@
 <?php
 /* Author: Marek Mečiar */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Globálny adresár';
 
-$messages = array();
+$messages = [];

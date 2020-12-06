@@ -1,7 +1,7 @@
 <?php
 /* Author: Philip Weir */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Global Addresses';
 
-$messages = array();
+$messages = [];

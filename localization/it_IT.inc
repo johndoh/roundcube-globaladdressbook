@@ -1,7 +1,7 @@
 <?php
 /* Author: Alessio Cecchi*/
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Indirizzi Globali';
 
-$messages = array();
+$messages = [];

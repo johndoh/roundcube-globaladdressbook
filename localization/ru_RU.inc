@@ -1,7 +1,7 @@
 <?php
 /* Author: zyxd */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Глобальные адреса';
 
-$messages = array();
+$messages = [];

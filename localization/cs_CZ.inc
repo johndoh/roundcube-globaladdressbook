@@ -1,7 +1,7 @@
 <?php
 /* Author: Vlastimil Wagner */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Globalní Adresář';
 
-$messages = array();
+$messages = [];
