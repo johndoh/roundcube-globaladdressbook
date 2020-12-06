@@ -1,7 +1,7 @@
 <?php
 /* Author: Ovidiu Bica */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Agendă globală';
 
-$messages = array();
+$messages = [];

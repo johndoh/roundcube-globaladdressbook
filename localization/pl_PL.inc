@@ -1,7 +1,7 @@
 <?php
 /* Author: DZIOBAK */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Globalne adresy';
 
-$messages = array();
+$messages = [];

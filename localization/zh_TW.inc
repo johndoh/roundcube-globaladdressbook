@@ -1,7 +1,7 @@
 <?php
 /* Author: Guo-Wei Su */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = '公用通訊錄';
 
-$messages = array();
+$messages = [];

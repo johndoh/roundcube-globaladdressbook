@@ -1,7 +1,7 @@
 <?php
 /* Author: Mustafa Icer */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'global adresler';
 
-$messages = array();
+$messages = [];

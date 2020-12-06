@@ -1,7 +1,7 @@
 <?php
 /* Author: Guillermo Asernitzky */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Direcciones globales';
 
-$messages = array();
+$messages = [];

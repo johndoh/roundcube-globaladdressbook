@@ -1,7 +1,7 @@
 <?php
 /* Author: MATSUI Shinsuke */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'グローバル・アドレス';
 
-$messages = array();
+$messages = [];

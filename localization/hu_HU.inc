@@ -1,7 +1,7 @@
 <?php
 /* Author: Norbert Wellinger */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Globális címjegyzék';
 
-$messages = array();
+$messages = [];

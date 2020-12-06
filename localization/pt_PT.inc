@@ -1,7 +1,7 @@
 <?php
 /* Author: Miguel Clara */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Endereços Globais';
 
-$messages = array();
+$messages = [];

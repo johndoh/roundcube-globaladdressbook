@@ -1,7 +1,7 @@
 <?php
 /* Author: Darknior */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Adresses Globales';
 
-$messages = array();
+$messages = [];

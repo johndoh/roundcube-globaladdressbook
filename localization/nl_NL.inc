@@ -1,7 +1,7 @@
 <?php
 /* Author: David Garabana Barro */
 
-$labels = array();
+$labels = [];
 $labels['globaladdressbook'] = 'Globale adressen';
 
-$messages = array();
+$messages = [];
