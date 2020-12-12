@@ -1,11 +1,11 @@
 {
   "name": "johndoh/globaladdressbook",
-  "description": "Add a global address book to Roundcube",
-  "keywords": ["global","address","book"],
+  "description": "Adds global address books to Roundcube",
+  "keywords": ["global","address","book","shared","contacts"],
   "homepage": "https://github.com/johndoh/roundcube-globaladdressbook/",
   "license": "GPL-3.0",
   "type": "roundcube-plugin",
-  "version": "1.12",
+  "version": "2.0",
   "authors": [
     {
       "name": "Philip Weir",

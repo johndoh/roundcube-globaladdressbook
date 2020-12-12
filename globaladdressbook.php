@@ -28,19 +28,22 @@
  */
 class globaladdressbook extends rcube_plugin
 {
+    const DEFAULT_NAME = 'Shared Contacts';
+    const DEFAULT_USER = '_global_addressbook_user_';
+    const DEFAULT_HOST = 'localhost';
+
     public $task = '^((?!login).)*$';
-    private $abook_id = 'global';
-    private $readonly = true;
-    private $groups = false;
-    private $name;
-    private $user_id;
+    private $abook_ids = [];
+    private $config = [];
     private $rcube;
+    private $autocomplete = false;
+    private $check_safe = false;
 
     public function init()
     {
         $this->rcube = rcube::get_instance();
 
-        $this->load_config();
+        $this->_load_config();
 
         // Host exceptions
         $hosts = $this->rcube->config->get('globaladdressbook_allowed_hosts');
@@ -48,66 +51,47 @@ class globaladdressbook extends rcube_plugin
             return;
         }
 
-        $this->add_texts('localization/');
-
-        $username = self::parse_user($this->rcube->config->get('globaladdressbook_user', '[global_addressbook_user]'));
-        $host = 'localhost';
-
-        $this->groups = $this->rcube->config->get('globaladdressbook_groups', false);
-        $this->name = $this->gettext('globaladdressbook');
-        $this->_set_permissions();
-
-        // email2user hook can be used by other plugins to do post processing on usernames, not just virtual user lookup
-        // matches process of user lookup and creation in the core
-        if (strpos($username, '@') !== false && ($virtuser = rcube_user::email2user($username))) {
-            $username = $virtuser;
-        }
-
-        // check if the global address book user exists
-        if (!($user = rcube_user::query($username, $host))) {
-            // this action overrides the current user information so make a copy and then restore it
-            $cur_user = $this->rcube->user;
-            $user = rcube_user::create($username, $host);
-            $this->rcube->user = $cur_user;
-
-            // prevent new_user_dialog plugin from triggering
-            $_SESSION['plugin.newuserdialog'] = false;
-        }
-
-        // global address book user ID
-        $this->user_id = $user->ID;
-
         $this->add_hook('addressbooks_list', [$this, 'address_sources']);
         $this->add_hook('addressbook_get', [$this, 'get_address_book']);
 
         // use this address book for autocompletion queries
-        if ($this->rcube->config->get('globaladdressbook_autocomplete')) {
+        if ($this->autocomplete) {
             $sources = (array) $this->rcube->config->get('autocomplete_addressbooks', 'sql');
-            if (!in_array($this->abook_id, $sources)) {
-                $sources[] = $this->abook_id;
-                $this->rcube->config->set('autocomplete_addressbooks', $sources);
+            foreach ($this->abook_ids as $id) {
+                if (!empty($this->config[$id]['autocomplete']) && !in_array($id, $sources)) {
+                    $sources[] = $id;
+                }
             }
+
+            $this->rcube->config->set('autocomplete_addressbooks', $sources);
         }
 
-        if ($this->rcube->config->get('globaladdressbook_check_safe')) {
+        if ($this->check_safe) {
             $this->add_hook('message_check_safe', [$this, 'check_known_senders']);
         }
     }
 
     public function address_sources($args)
     {
-        $args['sources'][$this->abook_id] = ['id' => $this->abook_id, 'name' => $this->name, 'readonly' => $this->readonly, 'groups' => $this->groups];
+        foreach ($this->abook_ids as $id) {
+            $args['sources'][$id] = [
+                'id' => $id,
+                'name' => $this->_get_config('name', $id, self::DEFAULT_NAME),
+                'readonly' => $this->_get_config('readonly', $id),
+                'groups' => $this->_get_config('groups', $id, false),
+            ];
+        }
 
         return $args;
     }
 
     public function get_address_book($args)
     {
-        if ($args['id'] === $this->abook_id) {
-            $args['instance'] = new rcube_contacts($this->rcube->db, $this->user_id);
-            $args['instance']->readonly = $this->readonly;
-            $args['instance']->groups = $this->groups;
-            $args['instance']->name = $this->name;
+        if (in_array($args['id'], $this->abook_ids)) {
+            $args['instance'] = new rcube_contacts($this->rcube->db, $this->_get_config('user_id', $args['id']));
+            $args['instance']->readonly = $this->_get_config('readonly', $args['id']);
+            $args['instance']->groups = $this->_get_config('groups', $args['id'], false);
+            $args['instance']->name = $this->_get_config('name', $args['id'], self::DEFAULT_NAME);
         }
 
         return $args;
@@ -119,20 +103,121 @@ class globaladdressbook extends rcube_plugin
         if ($args['message']->is_safe) {
             return;
         }
-        $contacts = $this->rcube->get_address_book($this->abook_id);
-        if ($contacts) {
-            $result = $contacts->search('email', $args['message']->sender['mailto'], 1, false);
-            if ($result->count) {
-                $args['message']->set_safe(true);
+
+        foreach ($this->abook_ids as $id) {
+            if (!empty($this->config[$id]['check_safe'])) {
+                $contacts = $this->rcube->get_address_book($id);
+                if ($contacts) {
+                    $result = $contacts->search('email', $args['message']->sender['mailto'], 1, false);
+                    if ($result->count) {
+                        $args['message']->set_safe(true);
+                        break;
+                    }
+                }
             }
         }
 
         return $args;
     }
 
-    public static function parse_user($name)
+    private function _load_config()
     {
-        $user = rcube::get_instance()->user;
+        parent::load_config();
+        $this->config = $this->rcube->config->get('globaladdressbooks');
+
+        // backwards compatibility with v1 config
+        if (!is_array($this->config)) {
+            $this->config['global'] = [
+                'name' => self::DEFAULT_NAME,
+                'user' => $this->rcube->config->get('globaladdressbook_user', null),
+                'perms' => $this->rcube->config->get('globaladdressbook_perms', 0),
+                'force_copy' => $this->rcube->config->get('globaladdressbook_force_copy', true),
+                'groups' => $this->rcube->config->get('globaladdressbook_groups', false),
+                'admin' => $this->rcube->config->get('globaladdressbook_admin', null),
+                'autocomplete' => $this->rcube->config->get('globaladdressbook_autocomplete', true),
+                'check_safe' => $this->rcube->config->get('globaladdressbook_check_safe', true),
+                'visibility' => null,
+            ];
+        }
+
+        foreach ($this->config as $id => &$config) {
+            // allow other plugins to update permission related config options
+            $data = $this->rcube->plugins->exec_hook('globaladdressbook_permissions', [
+                'id' => $id,
+                'perms' => isset($config['perms']) ? $config['perms'] : 0,
+                'admin' => isset($config['admin']) ? $this->_check_constraint($config['admin']) : false,
+                'visibility' => isset($config['visibility']) ? $this->_check_constraint($config['visibility']) : true,
+            ]);
+
+            // update config with plugin response
+            $config['perms'] = (int) $data['perms'];
+            $config['admin'] = (bool) $data['admin'];
+            $config['visibility'] = (bool) $data['visibility'];
+
+            if ($config['visibility']) {
+                $this->abook_ids[] = $id;
+
+                $username = isset($config['user']) ? $this->_parse_macros($config['user']) : self::DEFAULT_USER;
+                $host = isset($config['host']) ? $this->_parse_macros($config['host']) : self::DEFAULT_HOST;
+
+                $this->_set_readonly($id, $config);
+
+                // email2user hook can be used by other plugins to do post processing on usernames, not just virtual user lookup
+                // matches process of user lookup and creation in the core
+                if (strpos($username, '@') !== false && ($virtuser = rcube_user::email2user($username))) {
+                    $username = $virtuser;
+                }
+
+                // check if the global address book user exists
+                if (!($user = rcube_user::query($username, $host))) {
+                    // from rcube_user::create()
+                    $dbh = $this->rcube->get_dbh();
+                    $insert = $dbh->query(
+                        "INSERT INTO " . $dbh->table_name('users', true)
+                        . " (`created`, `username`, `mail_host`)"
+                        . " VALUES (" . $dbh->now() . ", ?, ?)",
+                        $username,
+                        $host
+                    );
+
+                    if ($dbh->affected_rows($insert) && ($user_id = $dbh->insert_id('users'))) {
+                        $config['user_id'] = $user_id;
+                    }
+                    else {
+                        rcube::raise_error([
+                            'code' => 500, 'line' => __LINE__, 'file' => __FILE__,
+                            'message' => "Globaladdressbook plugin: Failed to create user",
+                        ], true, false);
+                    }
+                }
+                else {
+                    $config['user_id'] = $user->ID;
+                }
+
+                // set autocomplete and check_safe globally to save checking each address book every time
+                if (!empty($config['autocomplete'])) {
+                    $this->autocomplete = true;
+                }
+
+                if (!empty($config['check_safe'])) {
+                    $this->check_safe = true;
+                }
+            }
+        }
+    }
+
+    private function _get_config($name, $abook_id, $return = null)
+    {
+        if (array_key_exists($name, $this->config[$abook_id])) {
+            $return = $this->config[$abook_id][$name];
+        }
+
+        return $return;
+    }
+
+    private function _parse_macros($str)
+    {
+        $user = $this->rcube->user;
 
         // %h - IMAP host
         $h = $_SESSION['storage_host'];
@@ -140,53 +225,57 @@ class globaladdressbook extends rcube_plugin
         $d = $user->get_username('domain');
         // %i - domain name after the '@' from e-mail address of default identity
         $i = '';
-        if (strpos($name, '%i') !== false) {
+        if (strpos($str, '%i') !== false) {
             $user_ident = $user->list_emails(true);
             list($local, $domain) = explode('@', $user_ident['email']);
             $i = $domain;
         }
 
-        return str_replace(['%h', '%d', '%i'], [$h, $d, $i], $name);
+        return str_replace(['%h', '%d', '%i'], [$h, $d, $i], $str);
     }
 
-    private function _set_permissions()
+    private function _check_constraint($var)
     {
-        $isAdmin = false;
+        $result = false;
 
-        // check for full permissions
-        $perms = $this->rcube->config->get('globaladdressbook_perms', 0);
-        if (in_array($perms, [1, 2, 3])) {
-            $this->readonly = false;
-        }
-
-        // check if the user is an admin
-        if ($admin = $this->rcube->config->get('globaladdressbook_admin')) {
-            if (!is_array($admin)) {
-                $admin = [$admin];
+        if (!empty($var)) {
+            if (!is_array($var)) {
+                $var = [$var];
             }
 
-            foreach ($admin as $user) {
-                if ($user == $_SESSION['username'] || @preg_match($user, $_SESSION['username']) === 1) {
-                    $this->readonly = false;
-                    $isAdmin = true;
+            foreach ($var as $user) {
+                if ($user == $_SESSION['username']) {
+                    $result = true;
                     break;
                 }
             }
         }
 
+        return $result;
+    }
+
+    private function _set_readonly($abook_id, &$config)
+    {
+        $config['readonly'] = true;
+
+        // check for full permissions
+        if (in_array($config['perms'], [1, 2, 3]) || $config['admin'] === true) {
+            $config['readonly'] = false;
+        }
+
         // check for task specific permissions
-        if ($this->rcube->task == 'addressbook' && rcube_utils::get_input_value('_source', rcube_utils::INPUT_GPC) == $this->abook_id) {
-            if ($this->rcube->action == 'move' && $this->rcube->config->get('globaladdressbook_force_copy')) {
+        if ($this->rcube->task == 'addressbook' && rcube_utils::get_input_value('_source', rcube_utils::INPUT_GPC) == $abook_id) {
+            if ($this->rcube->action == 'move' && !empty($config['force_copy'])) {
                 $this->rcube->overwrite_action('copy');
                 $this->rcube->output->command('list_contacts');
             }
 
             // do not override permissions for admins
-            if (!$isAdmin && !$this->readonly) {
-                if (in_array($this->rcube->action, ['show', 'edit']) && $perms == 2) {
-                    $this->readonly = true;
+            if (!$config['admin'] && !$config['readonly']) {
+                if (in_array($this->rcube->action, ['show', 'edit']) && $config['perms'] == 2) {
+                    $config['readonly'] = true;
                 }
-                elseif ($this->rcube->action == 'delete' && in_array($perms, [2, 3])) {
+                elseif ($this->rcube->action == 'delete' && in_array($config['perms'], [2, 3])) {
                     $this->rcube->output->command('display_message', $this->gettext('errornoperm'), 'info');
                     $this->rcube->output->command('list_contacts');
                     $this->rcube->output->send();

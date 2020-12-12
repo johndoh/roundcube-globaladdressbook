@@ -4,38 +4,53 @@
  * GlobalAddressbook configuration file
  */
 
-// the name of the dummy user which holds the global address book, if the user does not exist it will be created
-// the name can contain the following macros that will be expanded as follows:
-//      %d is replaced with the domain part of the username (if the username is an email address or default mail domain if not)
-//      %i is replaced with the domain part of the email address from the user's default identity
-//      %h is replaced with the imap host (from the session info)
-// eg. to create one global address book per domain: global_addressbook@%d
-$config['globaladdressbook_user'] = '[global_addressbook_user]';
+// In order to enable GlobalAddressbook configure an array like the global
+// example below. The array key must contain only safe characters, this will be
+// users as the internal identifier for the address book ie. a-zA-Z0-9_
+// This identifider is used when reference the address book in other parts
+// of Roundcube (eg. other plugins or main config) so it must be unique within
+// your with in installation.
+$config['globaladdressbooks']['global'] = [
+    // the name of the address book displayed to the user
+    'name' => 'Shared Contacts',
 
-// default user permissions
-// 0 - global address book is read only
-// 1 - users can add, edit and delete contacts (full permissions)
-// 2 - users can add but not edit or delete contacts
-// 3 - users can add and edit but not delete contacts
-$config['globaladdressbook_perms'] = 0;
+    // the name of the dummy user which holds the global address book, if the user does not exist it will be created
+    // the name can contain the following macros that will be expanded as follows:
+    //      %d is replaced with the domain part of the username (if the username is an email address or default mail domain if not)
+    //      %i is replaced with the domain part of the email address from the user's default identity
+    //      %h is replaced with the imap host (from the session info)
+    // eg. to create one global address book per domain: global_addressbook@%d
+    'user' => '_global_addressbook_user_',
 
-// always copy contacts from the global address book to another address book, never move
-$config['globaladdressbook_force_copy'] = true;
+    // default user permissions
+    // 0 - global address book is read only
+    // 1 - users can add, edit and delete contacts (full permissions)
+    // 2 - users can add but not edit or delete contacts
+    // 3 - users can add and edit but not delete contacts
+    'perms' => 0,
 
-// allow groups in global address book
-$config['globaladdressbook_groups'] = false;
+    // always copy contacts from the global address book to another address book, never move
+    'force_copy' => true,
 
-// global address book admin user
-// admin user(s) can always add/edit/delete entries, overrides readonly
-// either a single username, an array of usernames, or a regular expression, see README for more info
-$config['globaladdressbook_admin'] = null;
+    // allow groups in global address book
+    'groups' => false,
 
-// show addresses from the global address book in the auto complete menu when composing an email
-$config['globaladdressbook_autocomplete'] = true;
+    // global address book admin user
+    // admin user(s) can always add/edit/delete entries, overrides readonly
+    // either a single username, or an array of usernames, see README for more info
+    'admin' => null,
 
-// check globaladdressbook for known senders when displaying remote inline images
-$config['globaladdressbook_check_safe'] = true;
+    // show addresses from the global address book in the auto complete menu when composing an email
+    'autocomplete' => true,
+
+    // check globaladdressbook for known senders when displaying remote inline images
+    'check_safe' => true,
+
+    // address book visibility
+    // null for visible to all or an array of usernames, see README for more info
+    'visibility' => null,
+];
 
 // activate GlobalAddressbook for selected mail hosts only. If this is not set all mail hosts are allowed.
-// example: $config['globaladdressbook_allowed_hosts'] = array('mail1.domain.tld', 'mail2.domain.tld');
+// example: $config['globaladdressbook_allowed_hosts'] = ['mail1.domain.tld', 'mail2.domain.tld'];
 $config['globaladdressbook_allowed_hosts'] = null;
