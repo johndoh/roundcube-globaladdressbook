@@ -264,10 +264,17 @@ class globaladdressbook extends rcube_plugin
         }
 
         // check for task specific permissions
-        if ($this->rcube->task == 'addressbook' && rcube_utils::get_input_value('_source', rcube_utils::INPUT_GPC) == $abook_id) {
-            if ($this->rcube->action == 'move' && !empty($config['force_copy'])) {
-                $this->rcube->overwrite_action('copy');
-                $this->rcube->output->command('list_contacts');
+        if ($this->rcube->task == 'addressbook') {
+            if (rcube_utils::get_input_value('_source', rcube_utils::INPUT_GPC) == $abook_id) {
+                if ($this->rcube->action == 'move' && !empty($config['force_copy'])) {
+                    $this->rcube->overwrite_action('copy');
+                    $this->rcube->output->command('list_contacts');
+                }
+                elseif ($this->rcube->action == 'delete' && in_array($config['perms'], [2, 3]) && !$config['admin']) {
+                    $this->rcube->output->show_message('contactdelerror', 'error');
+                    $this->rcube->output->command('list_contacts');
+                    $this->rcube->output->send();
+                }
             }
 
             // do not override permissions for admins
@@ -275,10 +282,8 @@ class globaladdressbook extends rcube_plugin
                 if (in_array($this->rcube->action, ['show', 'edit']) && $config['perms'] == 2) {
                     $config['readonly'] = true;
                 }
-                elseif ($this->rcube->action == 'delete' && in_array($config['perms'], [2, 3])) {
-                    $this->rcube->output->command('display_message', $this->gettext('errornoperm'), 'info');
-                    $this->rcube->output->command('list_contacts');
-                    $this->rcube->output->send();
+                elseif ($this->rcube->action == 'import' && in_array($config['perms'], [2, 3])) {
+                    $config['readonly'] = true;
                 }
             }
         }

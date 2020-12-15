@@ -65,6 +65,9 @@ Restrict the actions that can be performed by users in the global address book
 * 2 - users can add but not edit or delete contacts
 * 3 - users can add and edit but not delete contacts
 
+**NB.**: With perms set to 0, 2, or 3 only admin users will be able to import
+contacts into the global address book.
+
 **Tip**: For more advanced options see tip `globaladdressbook_permissions` hook.
 
 **'force_copy'**
