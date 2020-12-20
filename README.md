@@ -68,7 +68,7 @@ Restrict the actions that can be performed by users in the global address book
 **NB.**: With perms set to 0, 2, or 3 only admin users will be able to import
 contacts into the global address book.
 
-**Tip**: For more advanced options see tip `globaladdressbook_permissions` hook.
+_**Tip**: For more advanced options see tip `globaladdressbook_permissions` hook._
 
 **'force_copy'**
 
@@ -88,7 +88,7 @@ if the address book is set to read only. The following options are available:
 * If you wish give admin rights to multiple users then enter the usernames in
   an array like: `'admin' => ['admin1@domain.com', 'admin2@domain.com'],`
 
-**Tip**: For more advanced options see tip `globaladdressbook_permissions` hook.
+_**Tip**: For more advanced options see tip `globaladdressbook_permissions` hook._
 
 **'autocomplete'**
 
@@ -107,7 +107,7 @@ options are available:
 * If you wish to limit access to a specific list of uesrs then enter usernames
   in an array like: `'visibility' => ['user2@domain.com', 'user2@domain.com'],`
 
-**Tip**: For more advanced options see tip `globaladdressbook_permissions` hook.
+_**Tip**: For more advanced options see tip `globaladdressbook_permissions` hook._
 
 **'allowed_hosts'**
 
@@ -129,7 +129,7 @@ Return:
 * admin: (boolean) if the address book is in admin mode
 * visibility: (boolean) if the address book is visible
 
-**Tip**: You can attach a function to the plugin hook from inside your config file.
+_**Tip**: You can attach a function to the plugin hook from inside your config file._
 ```php
 $api = rcube::get_instance()->plugins;
 $api->register_hook('globaladdressbook_permissions', function($p) {
