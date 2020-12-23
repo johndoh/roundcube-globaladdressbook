@@ -155,8 +155,6 @@ class globaladdressbook extends rcube_plugin
             $config['visibility'] = (bool) $data['visibility'];
 
             if ($config['visibility']) {
-                $this->abook_ids[] = $id;
-
                 $username = isset($config['user']) ? $this->_parse_macros($config['user']) : self::DEFAULT_USER;
                 $host = isset($config['host']) ? $this->_parse_macros($config['host']) : self::DEFAULT_HOST;
 
@@ -168,30 +166,16 @@ class globaladdressbook extends rcube_plugin
                     $username = $virtuser;
                 }
 
-                // check if the global address book user exists
-                if (!($user = rcube_user::query($username, $host))) {
-                    // from rcube_user::create()
-                    $dbh = $this->rcube->get_dbh();
-                    $insert = $dbh->query(
-                        "INSERT INTO " . $dbh->table_name('users', true)
-                        . " (`created`, `username`, `mail_host`)"
-                        . " VALUES (" . $dbh->now() . ", ?, ?)",
-                        $username,
-                        $host
-                    );
-
-                    if ($dbh->affected_rows($insert) && ($user_id = $dbh->insert_id('users'))) {
-                        $config['user_id'] = $user_id;
-                    }
-                    else {
-                        rcube::raise_error([
-                            'code' => 500, 'line' => __LINE__, 'file' => __FILE__,
-                            'message' => "Globaladdressbook plugin: Failed to create user",
-                        ], true, false);
-                    }
+                // get user id for the global address book user
+                if ($user_id = $this->_get_user($username, $host)) {
+                    $this->abook_ids[] = $id;
+                    $config['user_id'] = $user_id;
                 }
                 else {
-                    $config['user_id'] = $user->ID;
+                    rcube::raise_error([
+                        'code' => 500, 'line' => __LINE__, 'file' => __FILE__,
+                        'message' => "Globaladdressbook plugin: Failed to create user",
+                    ], true, false);
                 }
 
                 // set autocomplete and check_safe globally to save checking each address book every time
@@ -213,6 +197,42 @@ class globaladdressbook extends rcube_plugin
         }
 
         return $return;
+    }
+
+    private function _get_user($username, $host)
+    {
+        // check if the global address book user exists
+        if (!($user = rcube_user::query($username, $host))) {
+            // from rcube_user::create()
+            $data = $this->rcube->plugins->exec_hook('user_create', [
+                'host'        => $host,
+                'user'        => $username,
+                'user_name'   => '',
+                'user_email'  => '',
+                'email_list'  => null,
+                'language'    => null,
+                'preferences' => [],
+            ]);
+
+            if ($data['abort']) {
+                return;
+            }
+
+            $dbh = $this->rcube->get_dbh();
+            $insert = $dbh->query(
+                "INSERT INTO " . $dbh->table_name('users', true)
+                . " (`created`, `username`, `mail_host`)"
+                . " VALUES (" . $dbh->now() . ", ?, ?)",
+                $data['user'],
+                $data['host']
+            );
+
+            if ($dbh->affected_rows($insert) && ($user_id = $dbh->insert_id('users'))) {
+                $user = (object) ['ID' => $user_id];
+            }
+        }
+
+        return $user->ID;
     }
 
     private function _parse_macros($str)
