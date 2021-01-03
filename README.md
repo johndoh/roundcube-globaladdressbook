@@ -3,15 +3,6 @@ Roundcube Webmail GlobalAddressbook
 This plugin adds global SQL based address books to Roundcube. It can be
 global per installation, per IMAP host or per domain.
 
-ATTENTION
----------
-This is just a snapshot from the GIT repository and is **NOT A STABLE version
-of GlobalAddressbook**. It is Intended for use with the **GIT-master** version
-of Roundcube and it may not be compatible with older versions. Stable versions
-of GlobalAddressbook are available from the
-[Roundcube plugin repository][rcplugrepo] (for 1.0 and above) or the
-[releases section][releases] of the GitHub repository.
-
 License
 -------
 This plugin is released under the [GNU General Public License Version 3+][gpl].
@@ -140,6 +131,4 @@ $api->register_hook('globaladdressbook_permissions', function($p) {
 });
 ```
 
-[rcplugrepo]: https://plugins.roundcube.net/#/packages/johndoh/globaladdressbook
-[releases]: https://github.com/johndoh/roundcube-globaladdressbook/releases
 [gpl]: https://www.gnu.org/licenses/gpl.html
