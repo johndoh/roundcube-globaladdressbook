@@ -1,12 +1,14 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+Version 2.0 (2021-01-03, rc-1.3)
+=================================================
  * Complete rewrite of config options
- * Replace regex in `admin` config var with custom function
- * Define address book name in config, remove localizations
- * Change default username to _global_addressbook_user_
  * Support multiple address books on single host (#52)
  * Add globaladdressbook_permissions plugin hook
+ * Remove regex in 'admin' config var, use new hook instead
+ * Define address book name in config, remove localizations
+ * Change default username to _global_addressbook_user_
 
 Version 1.12 (2020-11-20, rc-1.3)
 =================================================

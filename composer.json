@@ -1,7 +1,7 @@
 {
   "name": "johndoh/globaladdressbook",
   "description": "Adds global address books to Roundcube",
-  "keywords": ["global","address","book","shared","contacts"],
+  "keywords": ["global", "address", "book", "shared", "contacts"],
   "homepage": "https://github.com/johndoh/roundcube-globaladdressbook/",
   "license": "GPL-3.0",
   "type": "roundcube-plugin",
