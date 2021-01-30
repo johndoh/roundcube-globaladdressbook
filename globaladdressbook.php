@@ -44,6 +44,7 @@ class globaladdressbook extends rcube_plugin
         $this->rcube = rcube::get_instance();
 
         $this->_load_config();
+        $this->add_texts('localization/');
 
         // Host exceptions
         $hosts = $this->rcube->config->get('globaladdressbook_allowed_hosts');
@@ -76,7 +77,7 @@ class globaladdressbook extends rcube_plugin
         foreach ($this->abook_ids as $id) {
             $args['sources'][$id] = [
                 'id' => $id,
-                'name' => $this->_get_config('name', $id, self::DEFAULT_NAME),
+                'name' => rcmail::Q($this->gettext('globaladdressbooks_'.$id)) ?: $this->_get_config('name', $id, self::DEFAULT_NAME),
                 'readonly' => $this->_get_config('readonly', $id),
                 'groups' => $this->_get_config('groups', $id, false),
             ];
@@ -91,7 +92,7 @@ class globaladdressbook extends rcube_plugin
             $args['instance'] = new rcube_contacts($this->rcube->db, $this->_get_config('user_id', $args['id']));
             $args['instance']->readonly = $this->_get_config('readonly', $args['id']);
             $args['instance']->groups = $this->_get_config('groups', $args['id'], false);
-            $args['instance']->name = $this->_get_config('name', $args['id'], self::DEFAULT_NAME);
+            $args['instance']->name = rcmail::Q($this->gettext('globaladdressbooks_'.$args['id'])) ?: $this->_get_config('name', $args['id'], self::DEFAULT_NAME);
         }
 
         return $args;
