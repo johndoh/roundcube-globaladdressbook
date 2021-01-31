@@ -26,6 +26,20 @@ Config
 The default config file is plugins/globaladdressbook/config.inc.php.dist
 Rename this to plugins/globaladdressbook/config.inc.php
 
+**'name'**
+
+This is the name of the address book that is displayed to users inside
+Roundcube. The value can be a string or an array of localized names. If an
+array is used the keys should be Roundcube localization identifiers and there
+must be a key called 'en_us'. All array keys must be lower case. For example:
+```php
+'name' => [
+    'en_us' => 'Global Addresses',
+    'ja_jp' => 'グローバル・アドレス',
+    'pt_pt' => 'Endereços Globais',
+  ],
+```
+
 **'user'**
 
 This is the name of the dummy user which holds the global address book.

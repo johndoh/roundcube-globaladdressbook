@@ -1,6 +1,8 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+ * Restore support for localized address book names (#54)
+
 Version 2.0 (2021-01-03, rc-1.3)
 =================================================
  * Complete rewrite of config options

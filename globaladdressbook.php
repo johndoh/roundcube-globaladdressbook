@@ -190,13 +190,19 @@ class globaladdressbook extends rcube_plugin
         }
     }
 
-    private function _get_config($name, $abook_id, $return = null)
+    private function _get_config($name, $abook_id, $default = null)
     {
         if (array_key_exists($name, $this->config[$abook_id])) {
             $return = $this->config[$abook_id][$name];
+
+            if ($name == 'name' && is_array($return)) {
+                // special handling for localized address book name
+                $return = $this->rcube->gettext(['name' => 'globaladdressbook.name'] + $return);
+                $return = $return == '[globaladdressbook.name]' ? $default : $return;
+            }
         }
 
-        return $return;
+        return !empty($return) ? $return : $default;
     }
 
     private function _get_user($username, $host)
