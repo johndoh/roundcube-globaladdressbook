@@ -5,7 +5,7 @@
   "homepage": "https://github.com/johndoh/roundcube-globaladdressbook/",
   "license": "GPL-3.0-or-later",
   "type": "roundcube-plugin",
-  "version": "2.0.1",
+  "version": "3.0-dev",
   "authors": [
     {
       "name": "Philip Weir",
@@ -14,7 +14,7 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0",
+    "php": ">=7.0",
     "roundcube/plugin-installer": ">=0.1.2"
   },
   "extra": {

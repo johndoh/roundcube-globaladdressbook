@@ -144,7 +144,7 @@ class globaladdressbook extends rcube_plugin
             // allow other plugins to update permission related config options
             $data = $this->rcube->plugins->exec_hook('globaladdressbook_permissions', [
                 'id' => $id,
-                'perms' => isset($config['perms']) ? $config['perms'] : 0,
+                'perms' => $config['perms'] ?? 0,
                 'admin' => isset($config['admin']) ? $this->_check_constraint($config['admin']) : false,
                 'visibility' => isset($config['visibility']) ? $this->_check_constraint($config['visibility']) : true,
             ]);
