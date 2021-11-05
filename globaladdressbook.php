@@ -291,7 +291,7 @@ class globaladdressbook extends rcube_plugin
 
         // check for task specific permissions
         if ($this->rcube->task == 'addressbook') {
-            if (rcube_utils::get_input_value('_source', rcube_utils::INPUT_GPC) == $abook_id) {
+            if (rcube_utils::get_input_string('_source', rcube_utils::INPUT_GPC) == $abook_id) {
                 if ($this->rcube->action == 'move' && !empty($config['force_copy'])) {
                     $this->rcube->overwrite_action('copy');
                     $this->rcube->output->command('list_contacts');
