@@ -246,7 +246,7 @@ class globaladdressbook extends rcube_plugin
         $user = $this->rcube->user;
 
         // %h - IMAP host
-        $h = $_SESSION['storage_host'];
+        $h = $_SESSION['storage_host'] ?? null;
         // %d - domain name after the '@' from username
         $d = $user->get_username('domain');
         // %i - domain name after the '@' from e-mail address of default identity
