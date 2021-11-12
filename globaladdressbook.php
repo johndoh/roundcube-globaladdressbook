@@ -32,7 +32,7 @@ class globaladdressbook extends rcube_plugin
     const DEFAULT_USER = '_global_addressbook_user_';
     const DEFAULT_HOST = 'localhost';
 
-    public $task = '^((?!login).)*$';
+    public $task = '?(?!login$|logout$|cli$).*';
     private $abook_ids = [];
     private $config = [];
     private $rcube;
