@@ -1,6 +1,11 @@
 Roundcube Webmail GlobalAddressbook
 ===================================
 
+Version 2.1 (2022-06-18, rc-1.5)
+=================================================
+ * Drop support for PHP < 7.0
+ * Improve PHP8 compatibility
+
 Version 2.0.2 (2021-11-12, rc-1.3)
 =================================================
  * Fix plugin installation via Composer on PHP8+
