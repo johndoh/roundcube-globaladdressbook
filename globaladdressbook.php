@@ -253,7 +253,7 @@ class globaladdressbook extends rcube_plugin
         $i = '';
         if (strpos($str, '%i') !== false) {
             $user_ident = $user->list_emails(true);
-            list($local, $domain) = explode('@', $user_ident['email']);
+            [$local, $domain] = explode('@', $user_ident['email']);
             $i = $domain;
         }
 
