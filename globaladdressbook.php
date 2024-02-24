@@ -28,9 +28,9 @@
  */
 class globaladdressbook extends rcube_plugin
 {
-    const DEFAULT_NAME = 'Shared Contacts';
-    const DEFAULT_USER = '_global_addressbook_user_';
-    const DEFAULT_HOST = 'localhost';
+    public const DEFAULT_NAME = 'Shared Contacts';
+    public const DEFAULT_USER = '_global_addressbook_user_';
+    public const DEFAULT_HOST = 'localhost';
 
     public $task = '?(?!login$|logout$|cli$).*';
     private $abook_ids = [];
@@ -170,11 +170,10 @@ class globaladdressbook extends rcube_plugin
                 if ($user_id = $this->_get_user($username, $host)) {
                     $this->abook_ids[] = $id;
                     $config['user_id'] = $user_id;
-                }
-                else {
+                } else {
                     rcube::raise_error([
                         'code' => 500, 'line' => __LINE__, 'file' => __FILE__,
-                        'message' => "Globaladdressbook plugin: Failed to create user",
+                        'message' => 'Globaladdressbook plugin: Failed to create user',
                     ], true, false);
                 }
 
@@ -211,12 +210,12 @@ class globaladdressbook extends rcube_plugin
         if (!($user = rcube_user::query($username, $host))) {
             // from rcube_user::create()
             $data = $this->rcube->plugins->exec_hook('user_create', [
-                'host'        => $host,
-                'user'        => $username,
-                'user_name'   => '',
-                'user_email'  => '',
-                'email_list'  => null,
-                'language'    => null,
+                'host' => $host,
+                'user' => $username,
+                'user_name' => '',
+                'user_email' => '',
+                'email_list' => null,
+                'language' => null,
                 'preferences' => [],
             ]);
 
@@ -226,9 +225,9 @@ class globaladdressbook extends rcube_plugin
 
             $dbh = $this->rcube->get_dbh();
             $insert = $dbh->query(
-                "INSERT INTO " . $dbh->table_name('users', true)
-                . " (`created`, `username`, `mail_host`)"
-                . " VALUES (" . $dbh->now() . ", ?, ?)",
+                'INSERT INTO ' . $dbh->table_name('users', true)
+                . ' (`created`, `username`, `mail_host`)'
+                . ' VALUES (' . $dbh->now() . ', ?, ?)',
                 $data['user'],
                 $data['host']
             );
@@ -295,8 +294,7 @@ class globaladdressbook extends rcube_plugin
                 if ($this->rcube->action == 'move' && !empty($config['force_copy'])) {
                     $this->rcube->overwrite_action('copy');
                     $this->rcube->output->command('list_contacts');
-                }
-                elseif ($this->rcube->action == 'delete' && in_array($config['perms'], [2, 3]) && !$config['admin']) {
+                } elseif ($this->rcube->action == 'delete' && in_array($config['perms'], [2, 3]) && !$config['admin']) {
                     $this->rcube->output->show_message('contactdelerror', 'error');
                     $this->rcube->output->command('list_contacts');
                     $this->rcube->output->send();
@@ -307,8 +305,7 @@ class globaladdressbook extends rcube_plugin
             if (!$config['admin'] && !$config['readonly']) {
                 if (in_array($this->rcube->action, ['show', 'edit']) && $config['perms'] == 2) {
                     $config['readonly'] = true;
-                }
-                elseif ($this->rcube->action == 'import' && in_array($config['perms'], [2, 3])) {
+                } elseif ($this->rcube->action == 'import' && in_array($config['perms'], [2, 3])) {
                     $config['readonly'] = true;
                 }
             }
