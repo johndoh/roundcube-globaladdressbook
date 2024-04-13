@@ -4,6 +4,8 @@
  * GlobalAddressbook configuration file
  */
 
+$config = [];
+
 // In order to enable GlobalAddressbook configure an array like the global
 // example below. The array key must contain only safe characters, this will be
 // users as the internal identifier for the address book ie. a-zA-Z0-9_
