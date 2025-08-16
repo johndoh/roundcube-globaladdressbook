@@ -1,5 +1,7 @@
 # Roundcube Webmail GlobalAddressbook
 
+- Drop support for PHP < 8.1
+
 ## Version 2.1 (2022-06-18, rc-1.5)
 
 - Drop support for PHP < 7.0

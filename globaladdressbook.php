@@ -162,7 +162,7 @@ class globaladdressbook extends rcube_plugin
 
                 // email2user hook can be used by other plugins to do post processing on usernames, not just virtual user lookup
                 // matches process of user lookup and creation in the core
-                if (strpos($username, '@') !== false && ($virtuser = rcube_user::email2user($username))) {
+                if (str_contains($username, '@') && ($virtuser = rcube_user::email2user($username))) {
                     $username = $virtuser;
                 }
 
@@ -250,7 +250,7 @@ class globaladdressbook extends rcube_plugin
         $d = $user->get_username('domain');
         // %i - domain name after the '@' from e-mail address of default identity
         $i = '';
-        if (strpos($str, '%i') !== false) {
+        if (str_contains($str, '%i')) {
             $user_ident = $user->list_emails(true);
             [$local, $domain] = explode('@', $user_ident['email']);
             $i = $domain;
