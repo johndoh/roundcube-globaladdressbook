@@ -39,6 +39,7 @@ class globaladdressbook extends rcube_plugin
     private $autocomplete = false;
     private $check_safe = false;
 
+    #[\Override]
     public function init()
     {
         $this->rcube = rcube::get_instance();
