@@ -3,6 +3,7 @@
   "description": "Adds global address books to Roundcube",
   "license": "GPL-3.0-or-later",
   "type": "roundcube-plugin",
+  "version": "2.2-dev",
   "keywords": [
     "global",
     "address",
