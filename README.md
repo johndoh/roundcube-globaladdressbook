@@ -23,17 +23,20 @@ folder for details on the skin license.
 
 Install
 -------
+* Install via Composer by adding `johndoh/globaladdressbook` to your
+`composer.json` file or running `composer require johndoh/globaladdressbook`
+<br/>or
 * Place this plugin folder into plugins directory of Roundcube
-* Add globaladdressbook to $config['plugins'] in your Roundcube config
+* Add `globaladdressbook` to `$config['plugins']` in your Roundcube config
 
 **NB:** When downloading the plugin from GitHub you will need to create a
-directory called globaladdressbook and place the files in there, ignoring the
+directory called `globaladdressbook` and place the files in there, ignoring the
 root directory in the downloaded archive.
 
 Config
 ------
-The default config file is plugins/globaladdressbook/config.inc.php.dist
-Rename this to plugins/globaladdressbook/config.inc.php
+The default config file is `plugins/globaladdressbook/config.inc.php.dist`
+Rename this to `plugins/globaladdressbook/config.inc.php`
 
 **'name'**
 
